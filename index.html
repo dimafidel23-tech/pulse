@@ -66,6 +66,15 @@ header{display:flex;justify-content:space-between;align-items:flex-end;gap:10px;
 .battbar::after{content:"";position:absolute;right:-5px;top:3px;width:3px;height:5px;border-radius:0 2px 2px 0;background:var(--dim)}
 .battbar i{display:block;height:100%;border-radius:2px;width:0}
 .batt b{font:600 16px var(--display);font-variant-numeric:tabular-nums}
+.alrow{display:flex;align-items:center;gap:12px;padding:14px 16px}
+.alrow .t{font:700 34px var(--display);letter-spacing:-1px;font-variant-numeric:tabular-nums}
+.alrow.off .t,.alrow.off .sub{opacity:.4}
+.sw{position:relative;width:52px;height:32px;flex:0 0 52px;margin-left:auto}
+.sw input{position:absolute;inset:0;opacity:0;margin:0;cursor:pointer;z-index:1}
+.sw span{position:absolute;inset:0;border-radius:99px;background:var(--card2);transition:background .2s}
+.sw span::after{content:"";position:absolute;top:3px;left:3px;width:26px;height:26px;border-radius:50%;background:var(--text);transition:transform .2s}
+.sw input:checked+span{background:var(--g)}
+.sw input:checked+span::after{transform:translateX(20px);background:#fff}
 .tag{display:inline-block;font-size:11px;font-weight:600;padding:3px 8px;border-radius:99px;background:var(--card2);color:var(--mute);margin-left:6px}
 .back{font-size:15px;color:var(--mute);cursor:pointer;background:none;border:0;padding:0;font-family:inherit}
 .iconbtn{background:var(--card);border:0;color:var(--text);width:40px;height:40px;border-radius:12px;display:grid;place-items:center;cursor:pointer}
@@ -199,11 +208,6 @@ nav svg{width:22px;height:22px}
       <div class="kick" style="color:var(--r)">Ранний сигнал</div>
       <div class="sub" id="illText"></div>
     </div>
-    <button class="tile" data-go="food" style="margin-bottom:10px">
-      <div style="display:flex;justify-content:space-between;align-items:baseline"><div class="l">Питание</div><div class="s" id="hKcalS"></div></div>
-      <div class="v" id="hKcal">0 ккал</div>
-      <div class="progress"><i id="hKcalBar" style="background:var(--food);width:0"></i></div>
-    </button>
     <div class="card" style="display:flex;gap:12px;align-items:center">
       <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="var(--sleep)" stroke-width="1.8" aria-hidden="true" style="flex:0 0 22px"><path d="M20 14A8 8 0 1 1 10 4a6.5 6.5 0 0 0 10 10z"/></svg>
       <div><div style="font-weight:600" id="bedTitle"></div><div class="sub" id="bedText"></div></div>
@@ -325,14 +329,21 @@ nav svg{width:22px;height:22px}
       <div class="big" id="slBed"></div>
       <div class="sub" id="slBedT"></div>
     </div>
-    <h2>Умный будильник</h2>
-    <div class="card">
-      <div class="seg" id="alarmSeg"><button data-a="bed" class="on">Ложусь в…</button><button data-a="wake">Встаю в…</button></div>
-      <div class="grid" style="grid-template-columns:1fr"><input id="alarmTime" type="time" aria-label="Время"></div>
-      <div class="chips" id="alarmOut"></div>
-    </div>
     <h2>Сон за 7 дней</h2>
     <div class="card"><div id="sleepChart"></div></div>
+  </section>
+
+  <!-- БУДИЛЬНИК -->
+  <section class="view" id="v-alarm">
+    <div id="alList"></div>
+    <div class="card">
+      <input id="alTime" type="time" value="07:00" aria-label="Время" style="font:700 40px var(--display);text-align:center;padding:12px;background:var(--card2)">
+      <div class="chips" id="alDays" style="justify-content:center"></div>
+      <div class="kick" style="margin-top:14px;text-align:center">Лечь сейчас — проснуться в конце цикла</div>
+      <div class="chips" id="alSmart" style="justify-content:center;margin-top:6px"></div>
+      <button class="btn" id="alAdd" style="margin-top:14px">Добавить</button>
+    </div>
+    <div class="note" id="alSync" style="text-align:center"></div>
   </section>
 
   <!-- УТРЕННИЙ ВВОД -->
@@ -440,7 +451,7 @@ nav svg{width:22px;height:22px}
 
 <nav>
   <a href="#home" data-v="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="3"/></svg>Сегодня</a>
-  <a href="#food" data-v="food"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M7 3v7a2 2 0 0 0 2 2v9M11 3v7a2 2 0 0 1-2 2M17 21V3c-2.2 1.2-3 4-3 7 0 2 1 3 3 3"/></svg>Питание</a>
+  <a href="#alarm" data-v="alarm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="13" r="7.5"/><path d="M12 9.5V13l2.5 2M5 4 2.8 6.2M19 4l2.2 2.2"/></svg>Будильник</a>
   <a href="#train" data-v="train"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6.5 7v10M3.5 9.5v5M17.5 7v10M20.5 9.5v5M6.5 12h11"/></svg>Тренировки</a>
   <a href="#sleep" data-v="sleep"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 14A8 8 0 1 1 10 4a6.5 6.5 0 0 0 10 10z"/></svg>Сон</a>
   <a href="#device" data-v="device"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M9 2h6v4M9 22h6v-4"/><rect x="6" y="6" width="12" height="12" rx="4"/><path d="M10 12h1l1-2 1.5 4 1-2h.5"/></svg>Устройство</a>
@@ -736,9 +747,6 @@ function renderHome(){
   const ill = illness(idx);
   $('illCard').hidden = ill.length < 2;
   $('illText').textContent = ill.length >= 2 ? `Возможно, организм с чем-то борется: ${ill.join(', ')}. Снизь нагрузку, больше спи и пей воды.` : '';
-  const ft = foodTotals(t), T = foodTargets();
-  $('hKcal').textContent = `${r0(ft.kcal)} ккал`; $('hKcalS').textContent = `из ${T.kcal}`;
-  bar($('hKcalBar'), ft.kcal/T.kcal, ft.kcal > T.kcal*1.1 ? 'var(--r)' : 'var(--food)');
   const b = bedPlan(st);
   $('bedTitle').textContent = `Ложись в ${hm(b.bed)}`; $('bedText').textContent = `чтобы встать в ${hm(b.wake)} выспавшимся`;
   $('vitals').innerHTML = VITALS.map(k => { const M = METRICS[k], v = dayVal(d, M.daily), zz = zone(M.daily, v);
@@ -759,18 +767,9 @@ function renderSleep(){
   const b = bedPlan(strainOf(tdy()));
   $('slBed').textContent = `Ложись в ${hm(b.bed)}`;
   $('slBedT').textContent = `Чтобы встать в ${hm(b.wake)}, нужно ${fmtH(b.need)} сна` + (b.debt ? `, включая ${b.debt} мин долга.` : '.');
-  if (!$('alarmTime').value) $('alarmTime').value = hm(b.bed);
-  renderAlarm();
   const list = []; for (let i = 6; i >= 0; i--){ const k = keyOff(i), dd = days[k], m = dd ? sleepMin(dd) : null; list.push({ key:k, v: m!=null ? m/60 : null, c: m!=null && m >= needBase()*0.95 ? 'var(--sleep)' : 'color-mix(in srgb,var(--sleep) 50%,var(--card2))' }); }
   bars($('sleepChart'), list, 'var(--sleep)', v=>v.toFixed(1), { goal: needBase()/60, empty:'Введи сон хотя бы за один день' });
 }
-function renderAlarm(){
-  const t = toMin($('alarmTime').value); if (t == null){ $('alarmOut').innerHTML = ''; return; }
-  const out = [6,5,4].map(c => alarmMode==='bed' ? [hm(t+15+c*90), c] : [hm(t-15-c*90), c]);
-  $('alarmOut').innerHTML = out.map(([v,c]) => `<span class="chip ${c===5?'on':''}">${v} <small>${c} цикл${c===4?'а':'ов'} · ${fmtH(c*90)}</small></span>`).join('');
-}
-qa('#alarmSeg button').forEach(b => b.onclick = () => { alarmMode = b.dataset.a; qa('#alarmSeg button').forEach(x=>x.classList.toggle('on', x===b)); renderAlarm(); });
-$('alarmTime').oninput = renderAlarm;
 
 // ================= УТРЕННИЙ ВВОД =================
 const QSTEPS = [
@@ -804,6 +803,49 @@ function qGo(dir){ if (!qStore()) return; if (dir > 0 && qi === QSTEPS.length-1)
 $('qNext').onclick = () => qGo(1); $('qPrev').onclick = () => qGo(-1);
 $('qSkip').onclick = () => { $('qInput').value = ''; qGo(1); };
 $('qInput').onkeydown = e => { if (e.key === 'Enter') qGo(1); };
+
+
+// ================= БУДИЛЬНИК (на браслете, команда B9) =================
+// [B9, 01 — записать / 00 — удалить, номер, час, мин, вкл, дни (Пн = бит 0 … Вс = бит 6), 00, разовый: годLo годHi месяц день]
+const DAYS = ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'];
+let alDraft = [0,1,2,3,4];
+const alarms = () => S.alarms || (S.alarms = []);
+function alPacket(a, op){
+  const p = [0xB9, op, a.id, a.h, a.m, a.on ? 1 : 0, a.days.reduce((s,i) => s | (1 << i), 0), 0];
+  if (!a.days.length){
+    const t = new Date(); t.setHours(a.h, a.m, 0, 0); if (t <= new Date()) t.setDate(t.getDate() + 1);
+    const y = t.getFullYear(); p.push(y & 255, (y >> 8) & 255, t.getMonth() + 1, t.getDate());
+  }
+  return pad20(p);
+}
+function alSyncAll(){
+  if (!VP.ready) return;
+  (S.alarmDel || []).forEach(a => vpSend(alPacket(a, 0)));
+  S.alarmDel = [];
+  alarms().forEach(a => vpSend(alPacket(a, 1)));
+  S.alarmSynced = true; saveS();
+}
+function alChanged(){ S.alarmSynced = false; saveS(); alSyncAll(); render(); }
+function renderAlarms(){
+  const list = alarms().slice().sort((a,b) => a.h*60 + a.m - (b.h*60 + b.m));
+  $('alList').innerHTML = list.map(a => `<div class="card alrow ${a.on ? '' : 'off'}"><div><div class="t">${hm(a.h*60 + a.m)}</div><div class="sub">${a.days.length === 7 ? 'Каждый день' : a.days.length ? a.days.map(i => DAYS[i]).join(' ') : 'Один раз'}</div></div>
+    <label class="sw"><input type="checkbox" data-al-on="${a.id}" ${a.on ? 'checked' : ''} aria-label="Включить"><span></span></label><button class="x" data-al-del="${a.id}" aria-label="Удалить">×</button></div>`).join('');
+  qa('[data-al-on]').forEach(x => x.onchange = () => { const a = alarms().find(z => z.id === +x.dataset.alOn); if (a){ a.on = x.checked; alChanged(); } });
+  qa('[data-al-del]').forEach(x => x.onclick = () => { const i = alarms().findIndex(z => z.id === +x.dataset.alDel); if (i >= 0){ (S.alarmDel = S.alarmDel || []).push(alarms()[i]); alarms().splice(i, 1); alChanged(); } });
+  $('alDays').innerHTML = DAYS.map((d,i) => `<button class="chip ${alDraft.includes(i) ? 'on' : ''}" data-al-day="${i}">${d}</button>`).join('');
+  qa('[data-al-day]').forEach(x => x.onclick = () => { const i = +x.dataset.alDay, k = alDraft.indexOf(i); k >= 0 ? alDraft.splice(k, 1) : alDraft.push(i); renderAlarms(); });
+  const now = new Date(), n = now.getHours()*60 + now.getMinutes() + 15;
+  $('alSmart').innerHTML = [6,5,4].map(c => `<button class="chip" data-al-smart="${hm(n + c*90)}">${hm(n + c*90)}<small>${c} цикл${c === 4 ? 'а' : 'ов'}</small></button>`).join('');
+  qa('[data-al-smart]').forEach(x => x.onclick = () => { $('alTime').value = x.dataset.alSmart; });
+  $('alSync').textContent = !alarms().length ? '' : VP.ready && S.alarmSynced ? 'На браслете' : 'Сохранится на браслет при подключении';
+}
+$('alAdd').onclick = () => {
+  const t = toMin($('alTime').value); if (t == null){ toast('Укажи время'); return; }
+  if (alarms().length >= 10){ toast('Не больше 10 будильников'); return; }
+  const used = new Set(alarms().map(a => a.id)); let id = 1; while (used.has(id)) id++;
+  alarms().push({ id, h: Math.floor(t/60), m: t % 60, on: true, days: alDraft.slice().sort() });
+  alChanged(); toast('Будильник добавлен');
+};
 
 // ================= ПИТАНИЕ =================
 let sample = null, sampleImages = false, foodDraft = null, foodBusy = false;
@@ -1364,7 +1406,7 @@ function vpOn(dv){
       if (b.length >= 4){
         VP.ready = b[3] === 1 || b[3] === 6;
         rawLog('Пароль: ' + (VP.ready ? 'принят' : 'не принят'));
-        if (VP.ready){ vpBattery(); setTimeout(() => histStart([2, 1, 0]), 800); } else toast('Браслет не принял пароль');
+        if (VP.ready){ vpBattery(); setTimeout(alSyncAll, 400); setTimeout(() => histStart([2, 1, 0]), 1200); } else toast('Браслет не принял пароль');
         render();
       }
       break;
@@ -1649,8 +1691,8 @@ function renderDevice(){
 $('dvNameSave').onclick = () => { const v = $('dvNameIn').value.trim().slice(0,16) || 'Loop'; dev().name = v; saveS(); render(); toast('Название сохранено'); };
 
 // ================= роутер =================
-const TITLES = { home:'Сегодня', food:'Питание', train:'Тренировки', sleep:'Сон', device:'Устройство', morning:'Утренний ввод', metric:'', setup:'Мои данные', prefs:'Профиль' };
-const MAIN = ['home','food','train','sleep','device'];
+const TITLES = { home:'Сегодня', food:'Питание', alarm:'Будильник', train:'Тренировки', sleep:'Сон', device:'Устройство', morning:'Утренний ввод', metric:'', setup:'Мои данные', prefs:'Профиль' };
+const MAIN = ['home','alarm','train','sleep','device'];
 let lastMain = 'home';
 const view = () => { const v = (location.hash || '#home').slice(1); if (/^m-/.test(v) && METRICS[v.slice(2)]) return 'metric'; return TITLES[v] != null ? v : 'home'; };
 // Перерисовка: не чаще одного раза за кадр и только той вкладки, что сейчас открыта
@@ -1670,6 +1712,7 @@ function renderNow(){
   const v = view();
   if (v === 'home') renderHome();
   else if (v === 'food') renderFood();
+  else if (v === 'alarm') renderAlarms();
   else if (v === 'train') renderTrain();
   else if (v === 'sleep') renderSleep();
   else if (v === 'device') renderDevice();
