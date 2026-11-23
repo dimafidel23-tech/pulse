@@ -1424,15 +1424,17 @@ function vpOn(dv){
       else measUpdate('bp', `Замеряю… ${prog}%`);
       break; }
     case 0xB5:
-      toast('Браслет ищет телефон');
+      if (b[1] === 0x0B) clearTimeout(VP.findT);          // поиск остановлен (кнопкой на браслете)
+      else if (b[1] !== 0x0A) toast('Браслет ищет телефон');
       break;
   }
 }
 function onVendor(su, dv){ if (su === VP.nt) vpOn(dv); }
 function vpFind(){
   if (!VP.ready){ toast('Сначала подключи браслет'); return; }
-  vpSend([0xAE, 1]); toast('Браслет вибрирует');
-  setTimeout(() => vpSend([0xAE, 0]), 6000);
+  // у этой модели поиск — команда B5: 0A включить, 0B выключить (старая AE не поддерживается)
+  vpSend(pad20([0xB5, 0x0A])); toast('Браслет вибрирует');
+  clearTimeout(VP.findT); VP.findT = setTimeout(() => vpSend(pad20([0xB5, 0x0B])), 10000);
 }
 function measureHTML(only){
   if (!VP.ready) return '';
