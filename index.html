@@ -1,0 +1,1430 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#07070a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Pulse">
+<link rel="apple-touch-icon" href="data:image/png;base64,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">
+<link rel="icon" href="data:image/png;base64,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">
+<style>:root{padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}body{margin:0}</style>
+</head>
+<body>
+<meta charset="utf-8">
+<title>Pulse</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Unbounded:wght@500;600;700&display=swap">
+<style>
+/* Layout: one narrow phone column on a near-black ground; three glowing rings open the day; wide display face for every number; fixed 5-tab bar */
+:root{
+  --bg:#07070a; --card:#13131a; --card2:#1c1c25; --line:#25252f; --track:#1f1f29;
+  --text:#f5f5f7; --mute:#8d8d9a; --dim:#5a5a68;
+  --g:#1fe08f; --g2:#9bffd2; --y:#ff9a1f; --y2:#ffc46b; --r:#ff4d6a; --r2:#ff9f7a;
+  --strain:#3d8bff; --strain2:#7ee0ff; --sleep:#9b7bff; --sleep2:#d3a6ff; --food:#ffd23f; --food2:#fff0a0;
+  --font:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;
+  --display:Unbounded,Inter,system-ui,sans-serif;
+  color-scheme:dark;
+}
+@media (prefers-color-scheme: light){ :root:not([data-theme="dark"]){
+  --bg:#f2f2f6; --card:#ffffff; --card2:#ebebf1; --line:#e1e1e8; --track:#e6e6ee;
+  --text:#0f0f14; --mute:#62626e; --dim:#a2a2ae;
+  --g:#0db873; --g2:#4fdca4; --y:#e8780c; --y2:#ff9f3a; --r:#e8304f; --r2:#ff7a6a;
+  --strain:#2a72e8; --strain2:#3fb6e8; --sleep:#7a52f0; --sleep2:#b07bff; --food:#c99a00; --food2:#ecc42a; color-scheme:light } }
+:root[data-theme="light"]{
+  --bg:#f2f2f6; --card:#ffffff; --card2:#ebebf1; --line:#e1e1e8; --track:#e6e6ee;
+  --text:#0f0f14; --mute:#62626e; --dim:#a2a2ae;
+  --g:#0db873; --g2:#4fdca4; --y:#e8780c; --y2:#ff9f3a; --r:#e8304f; --r2:#ff7a6a;
+  --strain:#2a72e8; --strain2:#3fb6e8; --sleep:#7a52f0; --sleep2:#b07bff; --food:#c99a00; --food2:#ecc42a; color-scheme:light }
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:15px;-webkit-font-smoothing:antialiased}
+.wrap{max-width:520px;margin:0 auto;padding-block:10px calc(96px + env(safe-area-inset-bottom,0px));padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+header{display:flex;justify-content:space-between;align-items:flex-end;gap:10px;margin:6px 2px 18px}
+.date{font-size:13px;color:var(--mute)}
+.date::first-letter{text-transform:uppercase}
+.ttl{font:700 25px/1.15 var(--display);letter-spacing:-.5px;margin-top:4px}
+.devchip{display:flex;align-items:center;gap:7px;background:var(--card);border:1px solid var(--line);color:var(--text);border-radius:99px;padding:8px 12px 8px 10px;font:600 13px var(--font);cursor:pointer;white-space:nowrap}
+.devchip .dot{box-shadow:0 0 8px currentColor}
+.devchip svg{width:18px;height:18px}
+.rings3{display:grid;grid-template-columns:1fr 1.32fr 1fr;align-items:end;gap:4px;margin:4px 0 16px}
+.rg{background:none;border:0;color:inherit;padding:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:8px;font-family:inherit;min-width:0}
+.rg svg{width:100%;height:auto;display:block;overflow:visible}
+.rg span{font-size:12px;font-weight:600;color:var(--mute);letter-spacing:.2px}
+.rg.main span{color:var(--text);font-size:13px}
+.status{display:flex;gap:12px;align-items:center;padding:14px 16px}
+.status .glow{width:10px;height:10px;border-radius:50%;flex:0 0 10px;box-shadow:0 0 12px currentColor;background:currentColor}
+.status b{display:block;font-size:15px}
+.status span{font-size:13px;color:var(--mute)}
+.devhero{display:flex;gap:18px;align-items:center;padding:18px;background:radial-gradient(120% 120% at 0% 0%,color-mix(in srgb,var(--strain) 22%,var(--card)) 0%,var(--card) 60%)}
+.devhero svg{flex:0 0 74px;width:74px;height:auto}
+.devname{font:700 24px/1.1 var(--display);letter-spacing:-.4px}
+.batt{display:flex;align-items:center;gap:10px;margin-top:12px}
+.battbar{flex:1;height:12px;border-radius:5px;border:1.5px solid var(--dim);padding:2px;position:relative}
+.battbar::after{content:"";position:absolute;right:-5px;top:3px;width:3px;height:5px;border-radius:0 2px 2px 0;background:var(--dim)}
+.battbar i{display:block;height:100%;border-radius:2px;width:0}
+.batt b{font:600 16px var(--display);font-variant-numeric:tabular-nums}
+.tag{display:inline-block;font-size:11px;font-weight:600;padding:3px 8px;border-radius:99px;background:var(--card2);color:var(--mute);margin-left:6px}
+.back{font-size:15px;color:var(--mute);cursor:pointer;background:none;border:0;padding:0;font-family:inherit}
+.iconbtn{background:var(--card);border:0;color:var(--text);width:40px;height:40px;border-radius:12px;display:grid;place-items:center;cursor:pointer}
+.iconbtn svg{width:20px;height:20px}
+.view{display:none}.view.on{display:block}
+.card{background:var(--card);border-radius:20px;padding:16px;margin-bottom:10px}
+.card h3{margin:0 0 4px;font-size:16px;font-weight:600}
+.sub{font-size:13px;color:var(--mute);line-height:1.45}
+.kick{font-size:12px;color:var(--mute);margin-bottom:4px}
+.big{font:600 19px/1.25 var(--display);letter-spacing:-.3px}
+h2{font-size:13px;font-weight:600;color:var(--mute);margin:22px 4px 10px}
+.hero{display:flex;align-items:center;gap:16px;margin-bottom:12px}
+.hero svg{flex:0 0 116px;width:116px;height:116px}
+.hero .t1{font-size:13px;font-weight:600}
+.hero .t2{font-size:19px;font-weight:700;line-height:1.25;letter-spacing:-.3px;text-wrap:balance}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.tile{background:var(--card);border-radius:16px;padding:14px;cursor:pointer;border:0;color:inherit;text-align:left;font-family:inherit;display:block;width:100%}
+.tile .l{font-size:12px;color:var(--mute)}
+.tile .v{font:600 20px var(--display);letter-spacing:-.4px;margin-top:4px;font-variant-numeric:tabular-nums}
+.tile .s{font-size:12px;color:var(--mute);margin-top:2px}
+.three{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.vt{background:var(--card);border-radius:14px;padding:11px 12px;cursor:pointer;border:0;color:inherit;text-align:left;font-family:inherit}
+.vt .l{font-size:11.5px;color:var(--mute);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.vt .v{font:600 16px var(--display);margin-top:5px;display:flex;align-items:center;gap:6px;font-variant-numeric:tabular-nums}
+.dot{width:7px;height:7px;border-radius:50%;flex:0 0 7px;display:inline-block}
+.row{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-top:1px solid var(--line);font-size:14px;gap:10px}
+.row:first-child{border-top:0}
+.row .l{color:var(--mute)}
+.row .r{font-weight:600;text-align:right;font-variant-numeric:tabular-nums}
+.row small{color:var(--dim);font-weight:500;margin-left:6px}
+.list{background:var(--card);border-radius:18px;padding:2px 16px;margin-bottom:10px}
+.btn{width:100%;background:var(--text);color:var(--bg);border:0;border-radius:14px;padding:14px;font:600 15px var(--font);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;text-align:center}
+.btn.ghost{background:var(--card2);color:var(--text)}
+.btn.sm{width:auto;padding:10px 14px;font-size:14px;border-radius:12px}
+.btn:disabled{opacity:.4;cursor:default}
+.btn:focus-visible,.tile:focus-visible,.vt:focus-visible,.chip:focus-visible,nav a:focus-visible{outline:2px solid var(--strain);outline-offset:2px}
+.btns{display:flex;gap:8px;margin-top:12px}
+.btns>*{flex:1}
+input,select,textarea{background:var(--card2);border:1px solid transparent;border-radius:12px;color:var(--text);padding:11px 12px;font:500 16px var(--font);width:100%;min-width:0;outline:none}
+input:focus,select:focus,textarea:focus{border-color:var(--dim)}
+.grid{display:grid;gap:8px;margin-top:10px}
+.chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}
+.chip{background:var(--card2);color:var(--text);border-radius:99px;padding:8px 12px;font:500 13px var(--font);cursor:pointer;border:0}
+.chip small{color:var(--mute);margin-left:4px}
+.chip.on{background:var(--text);color:var(--bg)}
+.chip.on small{color:var(--bg);opacity:.7}
+.seg{display:flex;background:var(--card2);border-radius:11px;padding:3px;margin-top:10px}
+.seg button{flex:1;background:none;border:0;color:var(--mute);font:500 13px var(--font);padding:8px 4px;border-radius:9px;cursor:pointer}
+.seg button.on{background:var(--card);color:var(--text)}
+.progress{height:6px;border-radius:99px;background:var(--card2);margin-top:8px;overflow:hidden}
+.progress i{display:block;height:100%;border-radius:99px}
+.macros{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:14px}
+.macros div{font-size:12px;color:var(--mute)}
+.macros b{display:block;font-size:15px;color:var(--text);margin-bottom:2px;font-variant-numeric:tabular-nums}
+.x{background:none;border:0;color:var(--dim);font-size:20px;cursor:pointer;padding:0 0 0 10px;line-height:1}
+.empty{color:var(--dim);font-size:13px;text-align:center;padding:18px 6px;line-height:1.45}
+.note{font-size:12px;color:var(--dim);line-height:1.5;margin:8px 4px 0}
+.warn{border:1px solid color-mix(in srgb,var(--r) 45%,transparent)}
+.banner{background:var(--card2);border-radius:12px;padding:10px 12px;font-size:13px;color:var(--mute);margin-bottom:10px}
+.toast{position:fixed;left:50%;bottom:calc(88px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--text);color:var(--bg);padding:10px 16px;border-radius:12px;font-size:13px;font-weight:600;opacity:0;transition:opacity .2s;pointer-events:none;z-index:20;white-space:nowrap}
+.toast.on{opacity:1}
+nav{position:fixed;left:0;right:0;bottom:0;z-index:10;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-top:1px solid var(--line);display:flex;justify-content:space-around;padding:8px max(6px,env(safe-area-inset-right,0px)) calc(8px + env(safe-area-inset-bottom,0px)) max(6px,env(safe-area-inset-left,0px))}
+nav a{color:var(--dim);text-decoration:none;font-size:10.5px;font-weight:600;display:flex;flex-direction:column;align-items:center;gap:4px;padding:3px 2px;border-radius:10px;flex:1;min-width:0}
+nav a.on{color:var(--text)}
+nav a.on svg{filter:drop-shadow(0 0 6px color-mix(in srgb,var(--text) 45%,transparent))}
+nav svg{width:22px;height:22px}
+.quick{text-align:center;padding:26px 6px 12px}
+.quick .q{font-size:22px;font-weight:700;margin-bottom:4px}
+.quick input{font-size:32px;font-weight:700;text-align:center;padding:14px;margin:18px 0 4px}
+.qdots{display:flex;gap:5px;justify-content:center;margin-bottom:18px}
+.qdots i{width:6px;height:6px;border-radius:50%;background:var(--card2)}
+.qdots i.on{background:var(--text)}
+.fitem{display:grid;grid-template-columns:1fr 80px;gap:8px;align-items:center;padding:10px 0;border-top:1px solid var(--line)}
+.fitem:first-child{border-top:0}
+.fitem input{padding:8px;text-align:center;font-size:15px}
+.fitem small{display:block;color:var(--dim);font-size:12px;margin-top:2px}
+.fphoto{width:100%;max-height:220px;object-fit:cover;border-radius:14px;margin-bottom:12px;display:block}
+.spin{display:inline-block;width:16px;height:16px;border:2px solid var(--card2);border-top-color:var(--text);border-radius:50%;animation:sp 1s linear infinite;vertical-align:middle;margin-right:8px}
+@keyframes sp{to{transform:rotate(360deg)}}
+.photo-btn{position:relative;overflow:hidden}
+.photo-btn input{position:absolute;inset:0;opacity:0;cursor:pointer}
+.setrow{display:flex;justify-content:space-between;align-items:center;color:var(--mute);font-size:14px;padding:3px 0;font-variant-numeric:tabular-nums}
+.exgroup{padding:12px 0;border-top:1px solid var(--line)}
+.exgroup:first-child{border-top:0}
+.exhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;gap:10px}
+.exhead b{font-size:15px}
+.linkbtn{background:none;border:0;color:var(--strain);font:600 13px var(--font);cursor:pointer;padding:4px 0;white-space:nowrap}
+.hint{font-size:13px;color:var(--strain);margin-top:8px;min-height:18px}
+.livebig{text-align:center;font:700 42px var(--display);letter-spacing:-1px;font-variant-numeric:tabular-nums;margin:6px 0 2px}
+.chart{width:100%;display:block;touch-action:pan-y}
+.tip{font-size:12px;color:var(--mute);text-align:center;min-height:16px;margin-top:4px}
+.stats3{display:grid;grid-template-columns:repeat(3,1fr);text-align:center;margin-top:8px}
+.stats3 b{display:block;font-size:17px}.stats3 span{font-size:11px;color:var(--dim)}
+.daynav{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.daynav button{background:var(--card2);border:0;color:var(--text);width:36px;height:36px;border-radius:10px;font-size:18px;cursor:pointer}
+.daynav button:disabled{opacity:.3}
+.daynav span{font-size:14px;font-weight:600}
+.bignum{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.bignum b{font:700 34px var(--display);letter-spacing:-1px;font-variant-numeric:tabular-nums}
+.bignum span{color:var(--mute);font-size:14px}
+.pill{display:inline-block;font-size:12px;font-weight:600;padding:3px 9px;border-radius:99px;margin-top:4px}
+.zrow{display:flex;align-items:center;gap:10px;padding:11px 0;border-top:1px solid var(--line);font-size:14px}
+.zrow:first-child{border-top:0}
+.zrow i{width:10px;height:10px;border-radius:3px;flex:0 0 10px}
+.zrow span{color:var(--mute);margin-left:auto;text-align:right}
+@media (prefers-reduced-motion: reduce){ *{transition:none!important;animation:none!important} }
+</style>
+
+<div class="wrap">
+  <header>
+    <div>
+      <button class="back" id="back" hidden>‹ Назад</button>
+      <div class="date" id="date"></div>
+      <div class="ttl" id="ttl">Сегодня</div>
+    </div>
+    <button class="devchip" id="devChip" data-go="device" aria-label="Устройство"><span class="dot" id="devDot" style="color:var(--dim);background:currentColor"></span><span id="devName">Loop</span><span id="devBat" style="color:var(--mute)"></span></button>
+  </header>
+  <div class="banner" id="banner" hidden></div>
+
+  <!-- СЕГОДНЯ -->
+  <section class="view" id="v-home">
+    <div class="rings3">
+      <button class="rg" data-go="sleep"><svg id="rSleepH" viewBox="0 0 120 120"></svg><span>Сон</span></button>
+      <button class="rg main" data-go="m-hrv"><svg id="rRec" viewBox="0 0 120 120"></svg><span>Восстановление</span></button>
+      <button class="rg" data-go="train"><svg id="rStrainH" viewBox="0 0 120 120"></svg><span>Нагрузка</span></button>
+    </div>
+    <div class="card status" id="statusCard">
+      <span class="glow" id="recGlow"></span>
+      <div><b id="recKick"></b><span id="recTitle"></span></div>
+    </div>
+    <div class="card warn" id="illCard" hidden>
+      <div class="kick" style="color:var(--r)">Ранний сигнал</div>
+      <div class="sub" id="illText"></div>
+    </div>
+    <button class="tile" data-go="food" style="margin-bottom:10px">
+      <div style="display:flex;justify-content:space-between;align-items:baseline"><div class="l">Питание</div><div class="s" id="hKcalS"></div></div>
+      <div class="v" id="hKcal">0 ккал</div>
+      <div class="progress"><i id="hKcalBar" style="background:var(--food);width:0"></i></div>
+    </button>
+    <div class="card" style="display:flex;gap:12px;align-items:center">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="var(--sleep)" stroke-width="1.8" aria-hidden="true" style="flex:0 0 22px"><path d="M20 14A8 8 0 1 1 10 4a6.5 6.5 0 0 0 10 10z"/></svg>
+      <div><div style="font-weight:600" id="bedTitle"></div><div class="sub" id="bedText"></div></div>
+    </div>
+    <h2>Показатели</h2>
+    <div class="three" id="vitals"></div>
+    <div style="height:12px"></div>
+    <button class="btn" id="morningBtn" data-go="morning">Ввести утренние цифры</button>
+  </section>
+
+  <!-- ПИТАНИЕ -->
+  <section class="view" id="v-food">
+    <div class="card">
+      <div class="bignum"><b id="fKcal">0</b><span id="fKcalOf"></span></div>
+      <div class="progress"><i id="fKcalBar" style="background:var(--food);width:0"></i></div>
+      <div class="macros" id="fMacros"></div>
+    </div>
+    <div class="btns" style="margin:0 0 10px">
+      <label class="btn photo-btn" id="camBtn">Сфотографировать<input type="file" id="foodCam" accept="image/*" capture="environment"></label>
+      <label class="btn ghost photo-btn" id="galBtn">Из галереи<input type="file" id="foodFile" accept="image/*"></label>
+    </div>
+    <div class="card">
+      <div class="grid" style="grid-template-columns:1fr auto;margin-top:0"><input id="foodText" placeholder="2 яйца, тост, кофе с молоком"><button class="btn sm" id="foodTextBtn">Посчитать</button></div>
+      <div class="note" id="foodAiNote" style="margin:8px 0 0"></div>
+    </div>
+    <div id="foodResult"></div>
+    <div id="favBox"></div>
+    <h2>Сегодня</h2>
+    <div class="list" id="foodList"></div>
+    <h2>Калории за 7 дней</h2>
+    <div class="card"><div id="kcalChart"></div></div>
+    <h2>Добавить вручную</h2>
+    <div class="card">
+      <div class="grid" style="grid-template-columns:1fr;margin-top:0"><input id="mfName" placeholder="Название, например протеиновый батончик"></div>
+      <div class="grid" style="grid-template-columns:repeat(4,minmax(0,1fr))">
+        <input id="mfKcal" type="number" inputmode="numeric" placeholder="ккал">
+        <input id="mfP" type="number" inputmode="decimal" placeholder="Б">
+        <input id="mfF" type="number" inputmode="decimal" placeholder="Ж">
+        <input id="mfC" type="number" inputmode="decimal" placeholder="У">
+      </div>
+      <button class="btn ghost" id="mfAdd" style="margin-top:10px">Добавить</button>
+    </div>
+    <h2>Моя норма</h2>
+    <div class="card">
+      <div class="seg" id="foodGoal" style="margin-top:0"><button data-g="lose">Похудеть</button><button data-g="keep">Держать вес</button><button data-g="gain">Набрать</button></div>
+      <div class="seg" id="foodSex"><button data-s="м">Мужской</button><button data-s="ж">Женский</button></div>
+      <div id="foodTargets" style="margin-top:6px"></div>
+    </div>
+  </section>
+
+  <!-- ТРЕНИРОВКИ -->
+  <section class="view" id="v-train">
+    <div class="card" id="liveCard">
+      <div class="kick">Тренировка</div>
+      <div id="liveIdle">
+        <select id="liveType" aria-label="Вид тренировки"></select>
+        <button class="btn" id="liveStart" style="margin-top:10px">Начать тренировку</button>
+      </div>
+      <div id="liveRun" hidden>
+        <div class="livebig" id="liveTime">00:00</div>
+        <div class="sub" style="text-align:center" id="liveInfo"></div>
+        <div class="grid" style="grid-template-columns:1fr"><input id="liveHr" type="number" inputmode="numeric" placeholder="Средний пульс с браслета (если есть)"></div>
+        <div class="btns"><button class="btn ghost" id="liveCancel">Отменить</button><button class="btn" id="liveStop">Завершить</button></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Подход</h3>
+      <div class="grid" style="grid-template-columns:1fr;margin-top:6px"><input id="gEx" list="exList" placeholder="Упражнение" autocomplete="off"></div>
+      <datalist id="exList"></datalist>
+      <div class="grid" style="grid-template-columns:1fr 1fr 52px">
+        <input id="gW" type="number" step="0.5" inputmode="decimal" placeholder="вес, кг">
+        <input id="gR" type="number" inputmode="numeric" placeholder="повторы">
+        <button class="btn sm" id="gAdd" aria-label="Записать подход" style="font-size:22px;padding:0">+</button>
+      </div>
+      <div class="hint" id="gHint"></div>
+    </div>
+
+    <h2>Сегодня</h2>
+    <div class="list" id="todaySets"></div>
+
+    <h2>Нагрузка</h2>
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px"><div class="big" id="tStrain">0</div><div class="sub" id="tStrainT"></div></div>
+      <div class="progress"><i id="tStrainBar" style="background:var(--strain);width:0"></i></div>
+      <div class="sub" id="tStrainHint" style="margin-top:8px"></div>
+      <div id="woList" style="margin-top:6px"></div>
+      <div class="grid" style="grid-template-columns:1.3fr 1fr 1fr 52px">
+        <select id="woType" aria-label="Вид тренировки"></select>
+        <input id="woMin" type="number" inputmode="numeric" placeholder="мин">
+        <input id="woHr" type="number" inputmode="numeric" placeholder="пульс">
+        <button class="btn sm" id="woAdd" aria-label="Добавить тренировку" style="font-size:22px;padding:0">+</button>
+      </div>
+      <div class="grid" style="grid-template-columns:1fr auto"><input id="stepsIn" type="number" inputmode="numeric" placeholder="Шаги за сегодня"><button class="btn sm ghost" id="stepsSave">Сохранить</button></div>
+    </div>
+
+    <h2>Прогресс в упражнении</h2>
+    <div class="card"><select id="progEx" aria-label="Упражнение"></select><div style="height:8px"></div><div id="progChart"></div></div>
+
+    <h2>Рекорды</h2>
+    <div class="list" id="records"></div>
+    <div class="note">Расчётный максимум (1ПМ) по формуле Эпли: вес × (1 + повторы / 30).</div>
+
+    <h2>Вес тела</h2>
+    <div class="card">
+      <div class="grid" style="grid-template-columns:1fr auto;margin-top:0"><input id="bwIn" type="number" step="0.1" inputmode="decimal" placeholder="Вес сегодня, кг"><button class="btn sm" id="bwSave">Сохранить</button></div>
+      <div style="height:8px"></div>
+      <div id="bwChart"></div>
+    </div>
+  </section>
+
+  <!-- СОН -->
+  <section class="view" id="v-sleep">
+    <div class="hero">
+      <svg id="rSleep" viewBox="0 0 120 120"></svg>
+      <div><div class="t1" style="color:var(--sleep)">Сон</div><div class="t2" id="slTitle"></div></div>
+    </div>
+    <div class="list" id="sleepList"></div>
+    <button class="btn ghost" data-go="morning" style="margin-bottom:10px">Ввести сон</button>
+    <div class="card">
+      <div class="kick">Сегодня вечером</div>
+      <div class="big" id="slBed"></div>
+      <div class="sub" id="slBedT"></div>
+    </div>
+    <h2>Умный будильник</h2>
+    <div class="card">
+      <div class="sub">Сон идёт циклами примерно по 90 минут. Проснуться в конце цикла легче.</div>
+      <div class="seg" id="alarmSeg"><button data-a="bed" class="on">Ложусь в…</button><button data-a="wake">Встаю в…</button></div>
+      <div class="grid" style="grid-template-columns:1fr"><input id="alarmTime" type="time" aria-label="Время"></div>
+      <div class="chips" id="alarmOut"></div>
+    </div>
+    <h2>Сон за 7 дней</h2>
+    <div class="card"><div id="sleepChart"></div></div>
+  </section>
+
+  <!-- УТРЕННИЙ ВВОД -->
+  <section class="view" id="v-morning">
+    <div class="card quick">
+      <div class="qdots" id="qdots"></div>
+      <div class="q" id="qLabel"></div>
+      <div class="sub" id="qHint"></div>
+      <input id="qInput" aria-label="Значение">
+      <div class="btns"><button class="btn ghost" id="qPrev">Назад</button><button class="btn ghost" id="qSkip">Пропустить</button><button class="btn" id="qNext">Далее</button></div>
+    </div>
+    <div class="note" style="text-align:center">Цифры бери из приложения браслета. Любой шаг можно пропустить.</div>
+  </section>
+
+  <!-- ПОКАЗАТЕЛЬ -->
+  <section class="view" id="v-metric">
+    <div class="card">
+      <div class="daynav"><button id="mPrev" aria-label="Предыдущий день">‹</button><span id="mDay"></span><button id="mNext" aria-label="Следующий день">›</button></div>
+      <div class="bignum"><b id="mVal">—</b><span id="mUnit"></span></div>
+      <span class="pill" id="mZone"></span>
+      <div style="height:10px"></div>
+      <div id="mChart"></div>
+      <div class="tip" id="mTip"></div>
+      <div class="stats3" id="mStats"></div>
+    </div>
+    <div class="card">
+      <h3>Добавить замер</h3>
+      <div class="grid" style="grid-template-columns:1fr 1fr 52px">
+        <input id="mTime" type="time" aria-label="Время замера"><input id="mInput" type="number" step="any" inputmode="decimal" aria-label="Значение"><button class="btn sm" id="mAdd" aria-label="Добавить замер" style="font-size:22px;padding:0">+</button>
+      </div>
+    </div>
+    <h2>По дням</h2>
+    <div class="card">
+      <div class="seg" id="mRange" style="margin-top:0"><button data-r="7" class="on">7 дней</button><button data-r="30">30 дней</button></div>
+      <div style="height:10px"></div>
+      <div id="mDays"></div>
+    </div>
+    <h2>Зоны</h2>
+    <div class="list" id="mZones"></div>
+    <div class="note" id="mNote"></div>
+  </section>
+
+  <!-- ПЕРВЫЙ ЗАПУСК -->
+  <section class="view" id="v-setup">
+    <div class="card quick">
+      <div class="qdots" id="sdots"></div>
+      <div class="q" id="sLabel"></div>
+      <div class="sub" id="sHint"></div>
+      <input id="sInput" aria-label="Значение">
+      <div class="sub" id="sAge"></div>
+      <div class="btns"><button class="btn ghost" id="sPrev">Назад</button><button class="btn" id="sNext">Далее</button></div>
+    </div>
+  </section>
+
+  <!-- УСТРОЙСТВО -->
+  <section class="view" id="v-device">
+    <div class="card devhero">
+      <svg viewBox="0 0 74 120" aria-hidden="true">
+        <rect x="22" y="0" width="30" height="120" rx="13" style="fill:var(--card2)"/>
+        <rect x="10" y="28" width="54" height="64" rx="20" style="fill:#050507;stroke:var(--line)" stroke-width="1.5"/>
+        <path d="M27 60l3.5-6 4 11 3.5-8 2.5 3h6" fill="none" style="stroke:var(--r)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <text x="37" y="80" text-anchor="middle" font-family="Unbounded,Inter,system-ui" font-size="10" font-weight="600" fill="#f5f5f7" id="dvScreen">—</text>
+      </svg>
+      <div style="flex:1;min-width:0">
+        <div class="devname" id="dvName">Loop</div>
+        <div class="batt"><div class="battbar"><i id="dvBatBar"></i></div><b id="dvBat">—</b></div>
+        <div class="sub" id="dvBatT" style="margin-top:4px">Заряд не указан</div>
+      </div>
+    </div>
+    <h2>Данные с браслета</h2>
+    <div class="list" id="dvSensors"></div>
+    <div class="card" style="display:flex;align-items:center;gap:12px">
+      <div style="flex:1"><div style="font-weight:600" id="dvFill"></div><div class="sub">показателей внесено сегодня</div></div>
+      <button class="btn sm" data-go="morning">Внести</button>
+    </div>
+    <h2>Подключение</h2>
+    <div class="card" id="dvConn"></div>
+    <div class="card">
+      <h3>Название</h3>
+      <div class="grid" style="grid-template-columns:1fr auto"><input id="dvNameIn" maxlength="16" placeholder="Loop"><button class="btn sm" id="dvNameSave">Сохранить</button></div>
+    </div>
+    <button class="btn ghost" data-go="prefs" style="margin-top:6px">Профиль, импорт и резервная копия</button>
+  </section>
+
+  <!-- НАСТРОЙКИ -->
+  <section class="view" id="v-prefs">
+    <div class="list" id="normList"></div>
+    <button class="btn ghost" data-go="setup" style="margin-bottom:10px">Изменить дату рождения, рост, вес</button>
+    <div class="card">
+      <h3>Импорт из Apple Здоровья</h3>
+      <div class="sub">Перенесёт замеры за последние 60 дней: пульс, HRV, кислород, давление, шаги, сон. В «Здоровье»: фото профиля → «Экспортировать все медданные» → сохрани в «Файлы» и выбери здесь export.zip.</div>
+      <label class="btn ghost photo-btn" style="margin-top:12px">Выбрать файл<input type="file" id="impFile" accept=".zip,.xml,application/zip,text/xml"></label>
+      <div class="note" id="impStatus" style="margin:8px 0 0"></div>
+    </div>
+    <div class="card" id="aiKeyCard" hidden>
+      <h3>ИИ для фото еды</h3>
+      <div class="sub">В браузерной версии еду по фото распознаёт Claude через твой ключ Anthropic API (оплата отдельно от подписки, обычно меньше $1 в месяц). Ключ хранится только на этом телефоне.</div>
+      <div class="sub" style="margin-top:6px">console.anthropic.com → пополни баланс → API Keys → Create Key → скопируй ключ (начинается с sk-ant-).</div>
+      <div class="grid" style="grid-template-columns:1fr auto"><input id="aiKey" type="password" placeholder="sk-ant-..." autocomplete="off"><button class="btn sm" id="aiKeySave">Сохранить</button></div>
+      <div class="note" id="aiKeyNote" style="margin:8px 0 0"></div>
+      <button class="btn ghost" id="aiKeyDel" style="margin-top:8px" hidden>Удалить ключ</button>
+    </div>
+    <div class="card">
+      <h3>Резервная копия</h3>
+      <div class="sub" id="storeInfo"></div>
+      <button class="btn ghost" id="copyData" style="margin-top:12px">Скопировать все данные</button>
+      <button class="btn ghost" id="pasteToggle" style="margin-top:8px">Восстановить из копии</button>
+      <div id="pasteBox" hidden style="margin-top:10px">
+        <textarea id="pasteArea" style="height:110px;font:12px ui-monospace,monospace" aria-label="Текст копии"></textarea>
+        <button class="btn" id="pasteApply" style="margin-top:8px">Загрузить</button>
+      </div>
+    </div>
+  </section>
+</div>
+
+<nav>
+  <a href="#home" data-v="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="3"/></svg>Сегодня</a>
+  <a href="#food" data-v="food"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M7 3v7a2 2 0 0 0 2 2v9M11 3v7a2 2 0 0 1-2 2M17 21V3c-2.2 1.2-3 4-3 7 0 2 1 3 3 3"/></svg>Питание</a>
+  <a href="#train" data-v="train"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6.5 7v10M3.5 9.5v5M17.5 7v10M20.5 9.5v5M6.5 12h11"/></svg>Тренировки</a>
+  <a href="#sleep" data-v="sleep"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 14A8 8 0 1 1 10 4a6.5 6.5 0 0 0 10 10z"/></svg>Сон</a>
+  <a href="#device" data-v="device"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M9 2h6v4M9 22h6v-4"/><rect x="6" y="6" width="12" height="12" rx="4"/><path d="M10 12h1l1-2 1.5 4 1-2h.5"/></svg>Устройство</a>
+</nav>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+const $ = id => document.getElementById(id);
+const qa = (s, r=document) => Array.from(r.querySelectorAll(s));
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const clamp = (v,a,b) => Math.max(a, Math.min(b, v));
+const avg = a => a.length ? a.reduce((s,x)=>s+x,0)/a.length : null;
+const sd = a => { const m = avg(a); return Math.sqrt(avg(a.map(x=>(x-m)**2))); };
+const r0 = v => Math.round(v);
+const keyOf = d => { const x = new Date(d); x.setMinutes(x.getMinutes()-x.getTimezoneOffset()); return x.toISOString().slice(0,10); };
+const todayKey = () => keyOf(new Date());
+const keyOff = n => { const d = new Date(todayKey()+'T12:00'); d.setDate(d.getDate()-n); return keyOf(d); };
+const fmtD = s => `${s.slice(8)}.${s.slice(5,7)}`;
+const toMin = t => { if (!t) return null; const [h,m] = String(t).split(':').map(Number); return isNaN(h) ? null : h*60+(m||0); };
+const hm = m => { m = ((Math.round(m)%1440)+1440)%1440; return `${String(Math.floor(m/60)).padStart(2,'0')}:${String(m%60).padStart(2,'0')}`; };
+const fmtH = m => m==null ? '—' : `${Math.floor(m/60)} ч ${String(Math.round(m%60)).padStart(2,'0')} м`;
+const nowHM = () => new Date().toTimeString().slice(0,5);
+const num = v => Number(String(v).replace(',', '.'));
+function toast(t){ const el = $('toast'); el.textContent = t; el.classList.add('on'); clearTimeout(toast.t); toast.t = setTimeout(()=>el.classList.remove('on'), 1800); }
+
+// ================= хранилище =================
+// Данные — в аккаунте Claude (capability db, личная папка пользователя). Если она недоступна — только в этом браузере.
+const LS_KEY = 'pulse2-cache';
+let days = {};                 // 'YYYY-MM-DD' -> запись дня
+let S = defaultsS();
+let loaded = false;
+function defaultsS(){ return { birth:null, height:null, weight:null, sex:'м', foodGoal:'keep', live:null, device:{ name:'Loop', battery:null, batteryAt:null } }; }
+const Store = { mode:'local', prof:null, col:null, gotS:false, gotD:false };
+const clone = o => JSON.parse(JSON.stringify(o));
+function cacheLocal(){ try{ localStorage.setItem(LS_KEY, JSON.stringify({ days, S })); }catch(e){} }
+function loadLocal(){ try{ const o = JSON.parse(localStorage.getItem(LS_KEY)); if (o && o.days){ days = o.days; S = Object.assign(defaultsS(), o.S || {}); return true; } }catch(e){} return false; }
+function showBanner(t){ $('banner').textContent = t; $('banner').hidden = !t; }
+
+async function initStore(){
+  const hadCache = loadLocal();
+  render();
+  let db = null, uid = null;
+  try{
+    if (window.claude && claude.use){
+      const [d, u] = await Promise.all([claude.use('db'), claude.use('user')]);
+      db = d; uid = u ? await u.id() : null;
+    }
+  }catch(e){}
+  if (!db || !uid){ Store.mode = 'local'; loaded = true; route(); return; }
+  Store.mode = 'db';
+  Store.prof = db.doc('data/users/' + uid + '/profile');
+  Store.col = Store.prof.collection('days');
+  const timer = setTimeout(() => { if (!loaded){ showBanner('Не получается связаться с хранилищем. Показываю сохранённое на этом телефоне.'); loaded = true; route(); } }, 10000);
+  const done = () => { if (Store.gotS && Store.gotD && !loaded){ clearTimeout(timer); loaded = true; showBanner(''); route(); } else render(); };
+  Store.prof.onSnapshot(s => {
+    if (s.exists) S = Object.assign(defaultsS(), clone(s.data()));
+    else if (!s.metadata.fromCache && S.birth) writeDoc('__S');      // перенос из кэша этого телефона
+    if (!s.metadata.fromCache) Store.gotS = true;
+    cacheLocal(); done();
+  }, () => { Store.gotS = true; done(); });
+  Store.col.onSnapshot(q => {
+    if (q.empty && !q.metadata.fromCache && Object.keys(days).length){ Object.keys(days).forEach(k => writeDoc(k)); }
+    else { const nd = {}; q.docs.forEach(d => { nd[d.id] = clone(d.data()); }); days = nd; }
+    if (!q.metadata.fromCache) Store.gotD = true;
+    cacheLocal(); done();
+  }, () => { Store.gotD = true; done(); });
+}
+
+// одна запись за раз на документ; новые изменения за время записи сливаются в следующую
+const busy = {}, dirty = {};
+async function writeDoc(key){
+  if (Store.mode !== 'db') return;
+  dirty[key] = true;
+  if (busy[key]) return;
+  busy[key] = true;
+  try{
+    while (dirty[key]){
+      dirty[key] = false;
+      if (key === '__S') await Store.prof.set(clone(S));
+      else if (days[key]) await Store.col.doc(key).set(clone(days[key]));
+    }
+  }catch(e){
+    busy[key] = false;
+    if (e && e.code === 'unavailable'){ setTimeout(() => writeDoc(key), 1500 + Math.random()*1000); return; }
+    toast(e && e.code === 'quota_exceeded' ? 'Хранилище заполнено' : 'Не удалось сохранить');
+    return;
+  }
+  busy[key] = false;
+}
+function saveDay(key=todayKey()){ cacheLocal(); writeDoc(key); }
+function saveS(){ cacheLocal(); writeDoc('__S'); }
+function dayRec(key=todayKey()){
+  const d = days[key] || (days[key] = { date:key });
+  d.food = d.food || []; d.gym = d.gym || []; d.workouts = d.workouts || [];
+  return d;
+}
+const tdy = () => days[todayKey()] || { date: todayKey() };
+let DL = [];
+const sortDays = () => { DL = Object.values(days).filter(d => d && d.date).sort((a,b) => a.date.localeCompare(b.date)); };
+
+// ================= нормы и расчёты =================
+function ageFromBirth(b){ if (!b) return null; const d = new Date(b+'T12:00'), t = new Date(); if (isNaN(d)) return null; let a = t.getFullYear()-d.getFullYear(); if (t.getMonth()<d.getMonth() || (t.getMonth()===d.getMonth() && t.getDate()<d.getDate())) a--; return a; }
+const age = () => ageFromBirth(S.birth) || 25;
+const maxHr = () => 208 - 0.7*age();
+const hrvRef = () => { const a = age(); return a < 25 ? 62 : a < 30 ? 58 : a < 40 ? 50 : a < 50 ? 40 : a < 60 ? 32 : 27; };
+const needBase = () => { const a = age(); return a < 18 ? 540 : a < 65 ? 480 : 450; };
+const NORM = () => ({ rhr:65, hrv:hrvRef(), temp:33.5 });
+function latestWeight(){ for (let i = DL.length-1; i >= 0; i--) if (DL[i].weight) return DL[i].weight; return S.weight || 75; }
+function bmi(){ const h = S.height, w = latestWeight(); return h && w ? Math.round(w/((h/100)**2)*10)/10 : null; }
+
+function dayVal(d, k){
+  if (!d) return null;
+  const s = d.samples || {};
+  switch (k){
+    case 'rhr': if (d.rhr != null) return d.rhr; if (s.hr && s.hr.length >= 6){ const v = s.hr.map(x=>x[1]).sort((a,b)=>a-b); return r0(v[Math.floor(v.length*0.1)]); } return null;
+    case 'bp': if (d.bp) return d.bp; if (s.bp && s.bp.length){ const l = s.bp[s.bp.length-1]; return [l[1], l[2]]; } return null;
+    case 'steps': if (d.steps != null) return d.steps; if (s.steps && s.steps.length) return s.steps.reduce((a,x)=>a+x[1],0); return null;
+    default: if (d[k] != null) return d[k]; if (s[k] && s[k].length){ const a = avg(s[k].map(x=>x[1])); return k==='temp' ? Math.round(a*10)/10 : r0(a); } return null;
+  }
+}
+function sleepMin(d){ const b = toMin(d && d.bed), w = toMin(d && d.wake); if (b==null || w==null) return null; let m = w-b; if (m <= 0) m += 1440; return m; }
+const hasData = d => !!d && (dayVal(d,'hrv') != null || dayVal(d,'rhr') != null || sleepMin(d) != null);
+const nightMin = t => { const m = toMin(t); return m==null ? null : (m < 720 ? m+1440 : m); };
+const restHr = () => { for (let i = DL.length-1; i >= 0; i--){ const v = dayVal(DL[i],'rhr'); if (v) return v; } return 62; };
+const trimpOf = (min, hr, rest) => { const x = clamp((hr-rest)/(maxHr()-rest), 0, 1); return min*x*0.64*Math.exp(1.92*x); };
+const toStrain = t => Math.round(21*(1-Math.exp(-t/110))*10)/10;
+function trimpDay(d){
+  if (!d) return 0;
+  const rest = dayVal(d,'rhr') || restHr(); let t = 0;
+  for (const w of (d.workouts||[])) if (w.min) t += trimpOf(w.min, w.hr || rest + (maxHr()-rest)*0.55, rest);
+  t += (d.gym||[]).length * 2;
+  const st = dayVal(d,'steps'); if (st) t += clamp(st/1000*1.5, 0, 25);
+  return t;
+}
+const strainOf = d => toStrain(trimpDay(d));
+function needParts(idx){
+  const prev = DL[idx-1], base = needBase(), load = prev ? r0(strainOf(prev)*4) : 0;
+  let debt = 0;
+  for (let i = Math.max(0, idx-7); i < idx; i++){ const m = sleepMin(DL[i]); if (m==null) continue; const p = DL[i-1]; debt += Math.max(0, base + (p ? strainOf(p)*4 : 0) - m); }
+  debt = Math.min(60, r0(debt*0.2));
+  return { base, load, debt, total: base+load+debt };
+}
+function sleepPerf(idx){ const m = sleepMin(DL[idx]); if (m==null) return null; return clamp(r0(m/needParts(idx).total*100), 0, 100); }
+function consistency(idx){
+  const w = DL.slice(Math.max(0, idx-3), idx+1).filter(x => x.bed && x.wake);
+  if (w.length < 2) return null;
+  return clamp(r0(100 - (sd(w.map(x=>nightMin(x.bed))) + sd(w.map(x=>toMin(x.wake))))/2*1.1), 0, 100);
+}
+function recovery(idx){
+  const d = DL[idx]; if (!d) return null;
+  const N = NORM(), hrv = dayVal(d,'hrv'), rhr = dayVal(d,'rhr'), spo2 = dayVal(d,'spo2'), temp = dayVal(d,'temp'), sp = sleepPerf(idx);
+  if (hrv == null && rhr == null && sp == null) return null;
+  let s = 58;
+  if (hrv != null) s += clamp((hrv-N.hrv)/N.hrv*100, -40, 40)*0.7;
+  if (rhr != null) s -= clamp((rhr-N.rhr)/N.rhr*100, -30, 30);
+  if (sp != null) s += (sp-85)*0.35;
+  if (spo2 != null && spo2 < 95) s -= (95-spo2)*3;
+  if (temp != null && Math.abs(temp-N.temp) > 0.7) s -= 6;
+  return clamp(r0(s), 1, 99);
+}
+const recColor = r => r == null ? 'var(--dim)' : r >= 67 ? 'var(--g)' : r >= 34 ? 'var(--y)' : 'var(--r)';
+const target = r => r == null ? [10,14] : r >= 67 ? [14,18] : r >= 34 ? [10,14] : [4,9];
+function usual(k, idx){ const p = DL.slice(Math.max(0, idx-14), idx).map(d=>dayVal(d,k)).filter(v=>v!=null); return p.length < 3 ? null : avg(p); }
+function illness(idx){
+  const d = DL[idx], r = []; if (!d) return r;
+  const v = k => dayVal(d, k), rh = usual('rhr', idx), hv = usual('hrv', idx), tp = usual('temp', idx), sp = usual('spo2', idx);
+  if (rh && v('rhr') != null && v('rhr') >= rh + 5) r.push(`пульс в покое выше обычного на ${r0(v('rhr')-rh)}`);
+  if (hv && v('hrv') != null && v('hrv') <= hv*0.8) r.push(`HRV ниже обычного на ${r0((1-v('hrv')/hv)*100)}%`);
+  if (tp && v('temp') != null && v('temp') >= tp + 0.5) r.push(`температура кожи выше обычной на ${(v('temp')-tp).toFixed(1)}°`);
+  if (sp && v('spo2') != null && v('spo2') <= sp - 2) r.push('кислород ниже обычного');
+  return r;
+}
+// «текущий» день: сегодня, а если сегодня пусто — последний день с данными
+function currentIdx(){ let i = DL.length-1; while (i > 0 && !hasData(DL[i])) i--; return i; }
+
+// ================= зоны показателей =================
+const METRICS = {
+  hr:     { name:'Пульс в покое', short:'Пульс', unit:'уд/мин', sample:'hr', daily:'rhr', input:'уд/мин' },
+  hrv:    { name:'HRV', short:'HRV', unit:'мс', sample:'hrv', daily:'hrv', input:'мс' },
+  spo2:   { name:'Кислород', short:'Кислород', unit:'%', sample:'spo2', daily:'spo2', input:'%' },
+  bp:     { name:'Давление', short:'Давление', unit:'мм рт.ст.', sample:'bp', daily:'bp', input:'126/69' },
+  temp:   { name:'Темп. кожи', short:'Кожа', unit:'°C', sample:'temp', daily:'temp', input:'°C' },
+  stress: { name:'Стресс', short:'Стресс', unit:'', sample:'stress', daily:'stress', input:'0–100' }
+};
+const VITALS = ['hr','hrv','spo2','bp','temp','stress'];
+const ZCOL = { g:'var(--g)', y:'var(--y)', r:'var(--r)' };
+const ZTXT = { g:'Идеально', y:'Удовлетворительно', r:'Плохо' };
+const parseBp = v => { const m = String(v||'').match(/(\d{2,3})\D+(\d{2,3})/); return m ? [Number(m[1]), Number(m[2])] : null; };
+function fmtVal(k, v){ if (v==null) return '—'; if (k==='bp') return v.join('/'); return k==='temp' ? Number(v).toFixed(1) : String(r0(v)); }
+function zone(k, v){
+  if (v == null) return null;
+  switch (k){
+    case 'rhr': return (v >= 50 && v <= 75) ? 'g' : (v >= 45 && v <= 90) ? 'y' : 'r';
+    case 'hrv': { const n = hrvRef(); return v >= n*0.85 ? 'g' : v >= n*0.6 ? 'y' : 'r'; }
+    case 'spo2': return v >= 95 ? 'g' : v >= 92 ? 'y' : 'r';
+    case 'temp': return (v >= 32 && v <= 35) ? 'g' : (v >= 31 && v <= 36) ? 'y' : 'r';
+    case 'stress': return v <= 50 ? 'g' : v <= 75 ? 'y' : 'r';
+    case 'bp': { const [sy, di] = v; if (sy >= 140 || di >= 90 || sy < 85) return 'r'; if (sy >= 130 || di >= 85 || sy < 90 || di < 60) return 'y'; return 'g'; }
+    case 'bmi': return (v >= 18.5 && v < 25) ? 'g' : (v >= 17 && v < 30) ? 'y' : 'r';
+  }
+  return null;
+}
+function zoneBands(k){
+  const I = Infinity;
+  switch (k){
+    case 'rhr': return [[50,75,'g'],[75,90,'y'],[45,50,'y'],[90,I,'r'],[-I,45,'r']];
+    case 'hrv': { const n = hrvRef(); return [[n*0.85,I,'g'],[n*0.6,n*0.85,'y'],[-I,n*0.6,'r']]; }
+    case 'spo2': return [[95,I,'g'],[92,95,'y'],[-I,92,'r']];
+    case 'temp': return [[32,35,'g'],[35,36,'y'],[31,32,'y'],[36,I,'r'],[-I,31,'r']];
+    case 'stress': return [[-I,50,'g'],[50,75,'y'],[75,I,'r']];
+    case 'bp': return [[90,130,'g'],[130,140,'y'],[85,90,'y'],[140,I,'r'],[-I,85,'r']];
+  }
+  return [];
+}
+function zoneText(k){
+  switch (k){
+    case 'rhr': return { g:'50–75', y:'76–90 или 45–49', r:'выше 90 или ниже 45' };
+    case 'hrv': { const n = hrvRef(); return { g:`от ${r0(n*0.85)}`, y:`${r0(n*0.6)}–${r0(n*0.85)}`, r:`ниже ${r0(n*0.6)}` }; }
+    case 'spo2': return { g:'95–100', y:'92–94', r:'ниже 92' };
+    case 'temp': return { g:'32–35', y:'31–32 или 35–36', r:'ниже 31 или выше 36' };
+    case 'stress': return { g:'до 50', y:'51–75', r:'выше 75' };
+    case 'bp': return { g:'90–129 / 60–84', y:'130–139 / 85–89', r:'от 140/90' };
+  }
+  return { g:'', y:'', r:'' };
+}
+const ZNOTE = {
+  rhr:'Для хорошей формы ориентир — до 75. У тренированных людей бывает 45–55, это нормально.',
+  hrv:'Норма HRV зависит от возраста и сильно отличается у разных людей. Важнее, как он меняется день ото дня.',
+  spo2:'Норма — 95–100%. Браслет на запястье может ошибаться на 1–3%.',
+  bp:'Браслет без манжеты мерит давление приблизительно. Для решений используй тонометр.',
+  temp:'Это температура кожи на запястье, а не тела. Обычно 32–35 °C.',
+  stress:'Шкала 0–100: до 50 — спокойное состояние, выше 75 — сильное напряжение.'
+};
+
+// ================= рисование =================
+// кольцо с градиентом и мягким свечением; c1/c2 — пара цветов
+function ring(svg, frac, c1, c2, big, small, o={}){
+  const id = svg.id + 'G', r = 50, c = 2*Math.PI*r, f = clamp(frac||0, 0, 1), off = c*(1-f), sw = o.sw || 10;
+  const fs = o.fs || (String(big).length > 3 ? 20 : 24);
+  svg.innerHTML = `<defs><linearGradient id="${id}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" style="stop-color:${c2}"/><stop offset="1" style="stop-color:${c1}"/></linearGradient></defs>
+    <circle cx="60" cy="60" r="${r}" fill="none" style="stroke:var(--track)" stroke-width="${sw}"/>
+    ${f > 0 ? `<circle cx="60" cy="60" r="${r}" fill="none" stroke="url(#${id})" style="filter:drop-shadow(0 0 5px color-mix(in srgb, ${c1} 65%, transparent))" stroke-width="${sw}" stroke-linecap="round" stroke-dasharray="${c}" stroke-dashoffset="${off}" transform="rotate(-90 60 60)"/>` : ''}
+    <text x="60" y="${small?63:68}" text-anchor="middle" style="fill:var(--text)" font-family="Unbounded,Inter,system-ui" font-weight="700" font-size="${fs}">${esc(big)}</text>
+    ${small?`<text x="60" y="81" text-anchor="middle" style="fill:var(--mute)" font-family="Inter,system-ui" font-weight="600" font-size="10.5">${esc(small)}</text>`:''}`;
+}
+const recPair = r => r == null ? ['var(--dim)','var(--dim)'] : r >= 67 ? ['var(--g)','var(--g2)'] : r >= 34 ? ['var(--y)','var(--y2)'] : ['var(--r)','var(--r2)'];
+function bars(el, list, color, fmt, opts={}){
+  const vals = list.filter(x=>x.v!=null).map(x=>x.v);
+  if (!vals.length){ el.innerHTML = `<div class="empty">${opts.empty || 'Пока нет данных'}</div>`; return; }
+  const n = list.length, W = 340, H = 150, L = 6, R = 6, T = 18, B = 22;
+  const hi = Math.max(...vals, opts.goal || 0) * 1.08, lo = opts.zero === false ? Math.min(...vals)*0.9 : 0;
+  const bw = (W-L-R)/n, Y = v => T + (hi-v)/((hi-lo)||1)*(H-T-B);
+  let g = '';
+  if (opts.goal){ const y = Y(opts.goal); g += `<line x1="${L}" x2="${W-R}" y1="${y}" y2="${y}" style="stroke:var(--mute)" stroke-dasharray="3 4" stroke-width="1"/>`; }
+  list.forEach((x,i) => { const cx = L + i*bw + bw/2;
+    if (x.v != null){ const y = Y(x.v); g += `<rect x="${cx-bw*0.32}" y="${y}" width="${bw*0.64}" height="${Math.max(2, H-B-y)}" rx="${Math.min(4,bw*0.3)}" style="fill:${x.c || color}"/>`;
+      if (n <= 10) g += `<text x="${cx}" y="${y-5}" text-anchor="middle" style="fill:var(--mute)" font-size="10" font-family="Inter,system-ui">${esc(fmt(x.v))}</text>`; }
+    if (n <= 10 || i % 5 === 0 || i === n-1) g += `<text x="${cx}" y="${H-6}" text-anchor="middle" style="fill:var(--dim)" font-size="9" font-family="Inter,system-ui">${fmtD(x.key)}</text>`; });
+  el.innerHTML = `<svg class="chart" viewBox="0 0 ${W} ${H}">${g}</svg>`;
+}
+function line(el, pts, color, fmt, empty){
+  pts = pts.filter(p => p.v != null);
+  if (pts.length < 2){ el.innerHTML = `<div class="empty">${empty || 'График появится, когда будет хотя бы 2 записи'}</div>`; return; }
+  const W = 340, H = 130, P = 22, vs = pts.map(p=>p.v), min = Math.min(...vs), max = Math.max(...vs), span = (max-min)||1;
+  const xy = pts.map((p,i)=>[P+i*(W-2*P)/(pts.length-1), H-26-(p.v-min)/span*(H-52)]);
+  const path = xy.map((p,i)=>(i?'L':'M')+p[0].toFixed(1)+' '+p[1].toFixed(1)).join(' ');
+  const showAll = pts.length <= 8;
+  el.innerHTML = `<svg class="chart" viewBox="0 0 ${W} ${H}"><path d="${path}" fill="none" style="stroke:${color}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+    ${xy.map((p,i)=> (showAll || i===0 || i===xy.length-1) ? `<circle cx="${p[0]}" cy="${p[1]}" r="3.2" style="fill:${color}"/>
+      <text x="${p[0]}" y="${H-6}" text-anchor="middle" style="fill:var(--dim)" font-size="10" font-family="Inter,system-ui">${fmtD(pts[i].d)}</text>
+      <text x="${p[0]}" y="${p[1]-9}" text-anchor="middle" style="fill:var(--mute)" font-size="10" font-family="Inter,system-ui">${esc(fmt(pts[i].v))}</text>` : '').join('')}</svg>`;
+}
+const row = (l, r, extra='') => `<div class="row"><span class="l">${l}</span><span class="r">${r}${extra}</span></div>`;
+const bar = (el, frac, color) => { el.style.width = clamp(frac||0,0,1)*100+'%'; if (color) el.style.background = color; };
+
+// ================= СЕГОДНЯ =================
+function bedPlan(st){
+  const wakes = DL.slice(-7).map(x=>toMin(x.wake)).filter(v=>v!=null);
+  const wake = wakes.length ? r0(avg(wakes)) : 420;
+  const np = needParts(DL.length);
+  const need = needBase() + r0(st*4) + np.debt;
+  return { wake, need, debt: np.debt, bed: wake - need - 15 };
+}
+function renderHome(){
+  const idx = currentIdx(), d = DL[idx], rec = recovery(idx), t = tdy(), st = strainOf(t), tg = target(rec);
+  $('date').textContent = new Date(todayKey()+'T12:00').toLocaleDateString('ru-RU',{weekday:'long',day:'numeric',month:'long'});
+  const sm = d ? sleepMin(d) : null, sp = d ? sleepPerf(idx) : null, rp = recPair(rec);
+  ring($('rSleepH'), (sp??0)/100, 'var(--sleep)', 'var(--sleep2)', sp==null ? '—' : sp+'%', sm ? `${Math.floor(sm/60)}:${String(sm%60).padStart(2,'0')}` : 'нет', { sw:11 });
+  ring($('rRec'), rec==null ? 0 : rec/100, rp[0], rp[1], rec==null ? '—' : rec+'%', '', { sw:11, fs:27 });
+  ring($('rStrainH'), st/21, 'var(--strain)', 'var(--strain2)', st.toFixed(1), `цель ${tg[0]}–${tg[1]}`, { sw:11 });
+  const z = rec==null ? ['Нет данных','Введи утренние цифры — посчитаю восстановление'] : rec>=67 ? ['Зелёная зона','Можно тренироваться в полную силу'] : rec>=34 ? ['Жёлтая зона','Тренируйся в умеренном темпе'] : ['Красная зона','Сегодня лучше отдохнуть'];
+  $('recKick').textContent = z[0]; $('recGlow').style.color = rp[0]; $('recTitle').textContent = z[1];
+  const ill = illness(idx);
+  $('illCard').hidden = ill.length < 2;
+  $('illText').textContent = ill.length >= 2 ? `Возможно, организм с чем-то борется: ${ill.join(', ')}. Снизь нагрузку, больше спи и пей воды.` : '';
+  const ft = foodTotals(t), T = foodTargets();
+  $('hKcal').textContent = `${r0(ft.kcal)} ккал`; $('hKcalS').textContent = `из ${T.kcal}`;
+  bar($('hKcalBar'), ft.kcal/T.kcal, ft.kcal > T.kcal*1.1 ? 'var(--r)' : 'var(--food)');
+  const b = bedPlan(st);
+  $('bedTitle').textContent = `Ложись в ${hm(b.bed)}`; $('bedText').textContent = `чтобы встать в ${hm(b.wake)} выспавшимся`;
+  $('vitals').innerHTML = VITALS.map(k => { const M = METRICS[k], v = dayVal(d, M.daily), zz = zone(M.daily, v);
+    return `<button class="vt" data-go="m-${k}"><div class="l">${M.short}</div><div class="v" style="color:${zz ? ZCOL[zz] : 'var(--text)'}">${fmtVal(M.daily, v)}</div></button>`; }).join('');
+  const filled = t.hrv != null || t.rhr != null || t.bed;
+  $('morningBtn').textContent = filled ? 'Изменить утренние цифры' : 'Ввести утренние цифры';
+  $('morningBtn').className = filled ? 'btn ghost' : 'btn';
+}
+
+// ================= СОН =================
+let alarmMode = 'bed';
+function renderSleep(){
+  const idx = currentIdx(), d = DL[idx], sm = d ? sleepMin(d) : null, sp = d ? sleepPerf(idx) : null, np = needParts(idx);
+  ring($('rSleep'), (sp??0)/100, 'var(--sleep)', 'var(--sleep2)', sp==null ? '—' : sp+'%', 'от нормы');
+  $('slTitle').textContent = sp==null ? 'Введи, во сколько лёг и встал' : sp>=85 ? 'Выспался' : sp>=70 ? 'Почти норма' : 'Недосып';
+  const cons = consistency(idx);
+  $('sleepList').innerHTML = [row('Время сна', fmtH(sm)), row('Отбой → подъём', d && d.bed && d.wake ? `${esc(d.bed)} → ${esc(d.wake)}` : '—'),
+    row('Нужно было', fmtH(np.total)), row('Долг сна', np.debt ? np.debt+' мин' : 'нет'),
+    row('Режим', cons==null ? '<small>нужно 2+ дня</small>' : cons+'%', cons==null ? '' : `<small>${cons>=80?'стабильный':cons>=60?'неплохой':'сбитый'}</small>`)].join('');
+  const b = bedPlan(strainOf(tdy()));
+  $('slBed').textContent = `Ложись в ${hm(b.bed)}`;
+  $('slBedT').textContent = `Чтобы встать в ${hm(b.wake)}, нужно ${fmtH(b.need)} сна` + (b.debt ? `, включая ${b.debt} мин долга.` : '.');
+  if (!$('alarmTime').value) $('alarmTime').value = hm(b.bed);
+  renderAlarm();
+  const list = []; for (let i = 6; i >= 0; i--){ const k = keyOff(i), dd = days[k], m = dd ? sleepMin(dd) : null; list.push({ key:k, v: m!=null ? m/60 : null, c: m!=null && m >= needBase()*0.95 ? 'var(--sleep)' : 'color-mix(in srgb,var(--sleep) 50%,var(--card2))' }); }
+  bars($('sleepChart'), list, 'var(--sleep)', v=>v.toFixed(1), { goal: needBase()/60, empty:'Введи сон хотя бы за один день' });
+}
+function renderAlarm(){
+  const t = toMin($('alarmTime').value); if (t == null){ $('alarmOut').innerHTML = ''; return; }
+  const out = [6,5,4].map(c => alarmMode==='bed' ? [hm(t+15+c*90), c] : [hm(t-15-c*90), c]);
+  $('alarmOut').innerHTML = out.map(([v,c]) => `<span class="chip ${c===5?'on':''}">${v} <small>${c} цикл${c===4?'а':'ов'} · ${fmtH(c*90)}</small></span>`).join('');
+}
+qa('#alarmSeg button').forEach(b => b.onclick = () => { alarmMode = b.dataset.a; qa('#alarmSeg button').forEach(x=>x.classList.toggle('on', x===b)); renderAlarm(); });
+$('alarmTime').oninput = renderAlarm;
+
+// ================= УТРЕННИЙ ВВОД =================
+const QSTEPS = [
+  { k:'bed', q:'Во сколько уснул?', h:'отбой', type:'time' },
+  { k:'wake', q:'Во сколько проснулся?', h:'подъём', type:'time' },
+  { k:'rhr', q:'Пульс в покое', h:'уд/мин', type:'number' },
+  { k:'hrv', q:'HRV', h:'вариабельность пульса, мс', type:'number' },
+  { k:'spo2', q:'Кислород', h:'SpO₂, %', type:'number' },
+  { k:'bp', q:'Давление', h:'например 126/69', type:'text' },
+  { k:'temp', q:'Температура кожи', h:'°C', type:'number' },
+  { k:'stress', q:'Стресс', h:'число из приложения браслета', type:'number' }
+];
+let qi = 0;
+function renderQuick(){
+  const s = QSTEPS[qi], t = tdy(), inp = $('qInput');
+  $('qdots').innerHTML = QSTEPS.map((_,i)=>`<i class="${i<=qi?'on':''}"></i>`).join('');
+  $('qLabel').textContent = s.q; $('qHint').textContent = s.h;
+  inp.type = s.type; inp.inputMode = s.type==='number' ? 'decimal' : s.k==='bp' ? 'numeric' : 'text'; inp.step = s.k==='temp' ? '0.1' : 'any';
+  inp.value = s.k==='bp' ? (t.bp ? t.bp.join('/') : '') : (t[s.k] ?? '');
+  $('qPrev').disabled = qi === 0; $('qNext').textContent = qi === QSTEPS.length-1 ? 'Готово' : 'Далее';
+}
+function qStore(){
+  const s = QSTEPS[qi], v = $('qInput').value.trim(); if (v === '') return true;
+  const r = dayRec();
+  if (s.k === 'bp'){ const b = parseBp(v); if (!b){ toast('Формат: 126/69'); return false; } r.bp = b; }
+  else if (s.type === 'time') r[s.k] = v;
+  else { const n = num(v); if (!isFinite(n)){ toast('Проверь число'); return false; } r[s.k] = n; }
+  saveDay(); return true;
+}
+function qGo(dir){ if (!qStore()) return; if (dir > 0 && qi === QSTEPS.length-1){ toast('Записано'); location.hash = '#home'; return; } qi = clamp(qi+dir, 0, QSTEPS.length-1); renderQuick(); }
+$('qNext').onclick = () => qGo(1); $('qPrev').onclick = () => qGo(-1);
+$('qSkip').onclick = () => { $('qInput').value = ''; qGo(1); };
+$('qInput').onkeydown = e => { if (e.key === 'Enter') qGo(1); };
+
+// ================= ПИТАНИЕ =================
+let sample = null, sampleImages = false, foodDraft = null, foodBusy = false;
+const IN_CLAUDE = !!(window.claude && window.claude.use);
+const AIKEY = 'pulse-ai-key';
+const blobToB64 = b => new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(String(r.result).split(',')[1]); r.onerror = rej; r.readAsDataURL(b); });
+// Вне Claude (браузер Bluefy): прямой запрос к Anthropic API с ключом пользователя — тот же интерфейс, что у sample
+function apiSample(key){
+  const call = async (prompt, opts={}) => {
+    const content = [];
+    for (const b of (opts.images || [])) content.push({ type:'image', source:{ type:'base64', media_type:'image/jpeg', data: await blobToB64(b) } });
+    content.push({ type:'text', text: prompt });
+    let r;
+    try{ r = await fetch('https://api.anthropic.com/v1/messages', { method:'POST',
+      headers:{ 'content-type':'application/json', 'x-api-key':key, 'anthropic-version':'2023-06-01', 'anthropic-dangerous-direct-browser-access':'true' },
+      body: JSON.stringify({ model:'claude-haiku-5-5', max_tokens:1024, messages:[{ role:'user', content }] }) }); }
+    catch(e){ throw { code:'network' }; }
+    if (r.status === 401 || r.status === 403) throw { code:'bad_key' };
+    if (r.status === 429) throw { code:'rate_limited' };
+    if (!r.ok){ const t = await r.text().catch(()=>''); throw { code: /credit|balance/i.test(t) ? 'no_credit' : 'upstream_error' }; }
+    const d = await r.json();
+    return { text: (d.content || []).map(c => c.text || '').join('') };
+  };
+  call.json = async (p, o) => { const { text } = await call(p, o); const m = text.match(/\{[\s\S]*\}/); if (!m) throw { code:'invalid_json' }; return JSON.parse(m[0]); };
+  call.limits = async () => ({ images:{ maxCount:1 } });
+  return call;
+}
+async function initAI(){
+  sample = null; sampleImages = false;
+  try{
+    if (IN_CLAUDE){ sample = await claude.use('sample'); if (sample){ const lim = await sample.limits().catch(()=>null); sampleImages = !!(lim && lim.images); } }
+    else { let k = null; try{ k = localStorage.getItem(AIKEY); }catch(e){} if (k){ sample = apiSample(k); sampleImages = true; } }
+  }catch(e){ sample = null; }
+  renderFood();
+}
+function foodTargets(){
+  const w = latestWeight(), h = S.height || 175, a = age(), male = (S.sex || 'м') === 'м';
+  const bmr = 10*w + 6.25*h - 5*a + (male ? 5 : -161);
+  const act = r0(strainOf(tdy()) * 15);
+  const tdee = bmr*1.4 + act, g = S.foodGoal || 'keep';
+  const kcal = r0((g==='lose' ? tdee*0.85 : g==='gain' ? tdee*1.1 : tdee)/10)*10;
+  const p = r0(w*(g==='gain' ? 2 : 1.8)), f = r0(w*0.9), c = Math.max(50, r0((kcal - p*4 - f*9)/4));
+  return { kcal, p, f, c, act };
+}
+const sumF = list => list.reduce((s,x) => ({ kcal:s.kcal+(+x.kcal||0), p:s.p+(+x.p||0), f:s.f+(+x.f||0), c:s.c+(+x.c||0) }), { kcal:0, p:0, f:0, c:0 });
+const foodTotals = d => sumF((d && d.food) || []);
+function macroHTML(t, T){
+  return [['Белки', t.p, T.p, 'var(--strain)'], ['Жиры', t.f, T.f, 'var(--y)'], ['Углеводы', t.c, T.c, 'var(--g)']]
+    .map(([n, v, g, c]) => `<div><b>${r0(v)} / ${g} г</b>${n}<div class="progress"><i style="width:${clamp(v/g,0,1)*100}%;background:${c}"></i></div></div>`).join('');
+}
+// частые блюда — из истории за 60 дней
+function favorites(){
+  const m = {};
+  DL.slice(-60).forEach(d => (d.food||[]).forEach(x => { const k = String(x.name||'').trim().toLowerCase(); if (!k) return;
+    const e = m[k] || (m[k] = { n:0, last:x, date:d.date }); e.n++; if (d.date >= e.date){ e.last = x; e.date = d.date; } }));
+  return Object.values(m).sort((a,b) => b.n - a.n || b.date.localeCompare(a.date)).slice(0, 8).map(e => e.last);
+}
+function addFood(x){
+  dayRec().food.push({ t: nowHM(), name: String(x.name).slice(0,80), kcal: r0(+x.kcal||0), p: r0(+x.p||0), f: r0(+x.f||0), c: r0(+x.c||0) });
+  saveDay(); render();
+}
+function renderFood(){
+  const t = foodTotals(tdy()), T = foodTargets();
+  $('fKcal').textContent = r0(t.kcal); $('fKcalOf').textContent = `из ${T.kcal} ккал · осталось ${Math.max(0, T.kcal - r0(t.kcal))}`;
+  bar($('fKcalBar'), t.kcal/T.kcal, t.kcal > T.kcal*1.1 ? 'var(--r)' : 'var(--food)');
+  $('fMacros').innerHTML = macroHTML(t, T);
+  const L = tdy().food || [];
+  $('foodList').innerHTML = L.length ? L.map((x,i) => `<div class="row"><span><b>${esc(x.name)}</b><br><span class="l" style="font-size:12px">${esc(x.t)} · Б ${r0(x.p)} · Ж ${r0(x.f)} · У ${r0(x.c)}</span></span><span class="r" style="white-space:nowrap">${r0(x.kcal)} ккал<button class="x" data-fd="${i}" aria-label="Удалить">×</button></span></div>`).join('')
+    : '<div class="empty">Сфотографируй еду, опиши словами или выбери из частых блюд</div>';
+  qa('[data-fd]').forEach(b => b.onclick = () => { dayRec().food.splice(+b.dataset.fd, 1); saveDay(); render(); toast('Удалено'); });
+  const fav = favorites();
+  $('favBox').innerHTML = fav.length ? `<h2>Частые блюда</h2><div class="chips" style="margin:0 0 4px">${fav.map((x,i)=>`<button class="chip" data-fav="${i}">${esc(x.name)}<small>${r0(x.kcal)}</small></button>`).join('')}</div>` : '';
+  qa('[data-fav]').forEach(b => b.onclick = () => { addFood(fav[+b.dataset.fav]); toast('Добавлено'); });
+  const list = []; for (let i = 6; i >= 0; i--){ const k = keyOff(i), dd = days[k], s = dd && (dd.food||[]).length ? foodTotals(dd).kcal : null; list.push({ key:k, v:s, c: s!=null && s > T.kcal*1.1 ? 'var(--r)' : 'var(--food)' }); }
+  bars($('kcalChart'), list, 'var(--food)', v=>r0(v), { goal:T.kcal, empty:'Здесь появятся калории по дням' });
+  qa('#foodGoal button').forEach(b => b.classList.toggle('on', b.dataset.g === (S.foodGoal || 'keep')));
+  qa('#foodSex button').forEach(b => b.classList.toggle('on', b.dataset.s === (S.sex || 'м')));
+  $('foodTargets').innerHTML = [row('Калории', T.kcal+' ккал', T.act ? `<small>+${T.act} за нагрузку</small>` : ''), row('Белки', T.p+' г'), row('Жиры', T.f+' г'), row('Углеводы', T.c+' г')].join('');
+  const ai = !!sample;
+  $('camBtn').hidden = $('galBtn').hidden = !(ai && sampleImages);
+  $('foodTextBtn').disabled = !ai;
+  $('foodAiNote').textContent = !ai ? (IN_CLAUDE ? 'ИИ здесь недоступен — добавляй еду вручную ниже.' : 'Чтобы распознавать еду по фото, добавь ключ Anthropic API: «Устройство» → «Профиль». Пока можно вручную ниже.') : sampleImages ? 'Сфотографируй тарелку или опиши словами. Оценка примерная, ±20%.' : 'Опиши, что съел, — посчитаю. Фото здесь недоступно.';
+  renderFoodDraft();
+}
+function renderFoodDraft(){
+  const el = $('foodResult');
+  if (foodBusy){ el.innerHTML = `<div class="card">${foodBusy.img ? `<img class="fphoto" src="${foodBusy.img}" alt="">` : ''}<span class="spin"></span>Считаю калории…</div>`; return; }
+  if (!foodDraft){ el.innerHTML = ''; return; }
+  const D = foodDraft, tot = sumF(D.items);
+  el.innerHTML = `<div class="card">${D.img ? `<img class="fphoto" src="${D.img}" alt="">` : ''}
+    <div class="big">${esc(D.name)}</div>
+    <div class="sub" id="fdTot" style="margin-top:2px">${r0(tot.kcal)} ккал · Б ${r0(tot.p)} · Ж ${r0(tot.f)} · У ${r0(tot.c)}</div>
+    ${D.note ? `<div class="note" style="margin:6px 0 0">${esc(D.note)}</div>` : ''}
+    <div style="margin-top:8px">${D.items.map((x,i) => `<div class="fitem"><div>${esc(x.name)}<small id="fdI${i}">${r0(x.kcal)} ккал</small></div><input type="number" inputmode="numeric" value="${r0(x.grams)}" data-fg="${i}" aria-label="Граммы: ${esc(x.name)}"></div>`).join('')}</div>
+    <div class="note" style="margin:6px 0 0">Справа — граммы. Поправь, если порция другая.</div>
+    <div class="btns"><button class="btn ghost" id="fdCancel">Отмена</button><button class="btn" id="fdSave">Добавить</button></div></div>`;
+  qa('[data-fg]').forEach(inp => inp.oninput = () => {
+    const i = +inp.dataset.fg, it = D.items[i], g = Math.max(0, Number(inp.value) || 0);
+    if (it.base.grams){ const k = g / it.base.grams; Object.assign(it, { grams:g, kcal:it.base.kcal*k, p:it.base.p*k, f:it.base.f*k, c:it.base.c*k }); }
+    $('fdI'+i).textContent = `${r0(it.kcal)} ккал`;
+    const t2 = sumF(D.items); $('fdTot').textContent = `${r0(t2.kcal)} ккал · Б ${r0(t2.p)} · Ж ${r0(t2.f)} · У ${r0(t2.c)}`;
+  });
+  $('fdSave').onclick = () => { const tt = sumF(D.items); foodDraft = null; addFood({ name:D.name, ...tt }); toast('Добавлено'); };
+  $('fdCancel').onclick = () => { foodDraft = null; renderFoodDraft(); };
+}
+async function shrinkImage(file){
+  const url = URL.createObjectURL(file);
+  try{
+    const img = await new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = rej; i.src = url; });
+    const k = Math.min(1, 1280 / Math.max(img.width, img.height)), cv = document.createElement('canvas');
+    cv.width = r0(img.width*k); cv.height = r0(img.height*k); cv.getContext('2d').drawImage(img, 0, 0, cv.width, cv.height);
+    const blob = await new Promise(res => cv.toBlob(res, 'image/jpeg', 0.85));
+    return { blob, preview: cv.toDataURL('image/jpeg', 0.6) };
+  } finally { URL.revokeObjectURL(url); }
+}
+const FOOD_FORMAT = 'Ответь только JSON-объектом: {"food":true,"name":"короткое название блюда по-русски","items":[{"name":"продукт по-русски","grams":число,"kcal":число,"p":число,"f":число,"c":число}],"note":"короткий комментарий по-русски, если есть сомнения, иначе пустая строка"}. p — белки, f — жиры, c — углеводы, в граммах; числа без единиц. Если это не еда — {"food":false}.';
+async function analyzeFood(text, blob, img){
+  if (!sample || foodBusy) return;
+  foodDraft = null; foodBusy = { img }; renderFoodDraft();
+  try{
+    const prompt = blob
+      ? 'Ты опытный нутрициолог. На фото еда. Определи блюдо и каждый продукт, оцени вес порции по размеру тарелки и приборов, посчитай калории и БЖУ для всей видимой порции. ' + FOOD_FORMAT
+      : 'Ты опытный нутрициолог. Человек описал, что съел: «' + text.replace(/[«»"]/g, '').slice(0, 500) + '». Если вес не указан, возьми обычную порцию. Посчитай калории и БЖУ. ' + FOOD_FORMAT;
+    const o = await sample.json(prompt, blob ? { images:[blob] } : {});
+    if (!o || !o.food){ foodBusy = false; renderFoodDraft(); toast('Не похоже на еду'); return; }
+    const items = (Array.isArray(o.items) ? o.items : []).filter(x => x && x.name).map(x => { const it = { name:String(x.name).slice(0,60), grams:+x.grams||0, kcal:+x.kcal||0, p:+x.p||0, f:+x.f||0, c:+x.c||0 }; it.base = { ...it }; return it; });
+    if (!items.length) throw { code:'empty' };
+    foodDraft = { name: String(o.name || items[0].name).slice(0,80), items, note: o.note ? String(o.note).slice(0,200) : '', img };
+  }catch(e){
+    const c = e && e.code;
+    if (c === 'not_granted' || c === 'sampling_disabled' || c === 'not_declared' || c === 'capability_disabled'){ sample = null; toast('Доступ к ИИ не разрешён'); }
+    else if (c === 'images_unavailable'){ sampleImages = false; toast('Фото здесь недоступно — опиши словами'); }
+    else if (c === 'rate_limited') toast('Слишком часто — подожди немного');
+    else if (c === 'bad_key') toast('Ключ API не подходит — проверь в Профиле');
+    else if (c === 'no_credit') toast('На счёте Anthropic закончились деньги');
+    else if (c === 'network') toast('Нет интернета');
+    else if (c === 'image_rejected') toast('Это фото не подошло, попробуй другое');
+    else if (c !== 'cancelled') toast('Не получилось распознать, попробуй ещё раз');
+  }
+  foodBusy = false; renderFood();
+}
+async function onFoodPhoto(e){
+  const f = e.target.files && e.target.files[0]; e.target.value = ''; if (!f) return;
+  try{ const { blob, preview } = await shrinkImage(f); analyzeFood('', blob, preview); }catch(err){ toast('Не удалось открыть фото'); }
+}
+$('foodCam').onchange = onFoodPhoto; $('foodFile').onchange = onFoodPhoto;
+$('foodTextBtn').onclick = () => { const v = $('foodText').value.trim(); if (!v){ toast('Опиши, что ты съел'); return; } $('foodText').value = ''; analyzeFood(v, null, null); };
+$('foodText').onkeydown = e => { if (e.key === 'Enter') $('foodTextBtn').click(); };
+qa('#foodGoal button').forEach(b => b.onclick = () => { S.foodGoal = b.dataset.g; saveS(); render(); });
+qa('#foodSex button').forEach(b => b.onclick = () => { S.sex = b.dataset.s; saveS(); render(); });
+$('mfAdd').onclick = () => {
+  const n = $('mfName').value.trim(), k = num($('mfKcal').value);
+  if (!n || !k){ toast('Укажи название и калории'); return; }
+  addFood({ name:n, kcal:k, p:num($('mfP').value)||0, f:num($('mfF').value)||0, c:num($('mfC').value)||0 });
+  ['mfName','mfKcal','mfP','mfF','mfC'].forEach(id => $(id).value = ''); toast('Добавлено');
+};
+
+// ================= ТРЕНИРОВКИ =================
+const WO_TYPES = ['Зал','Бег','Ходьба','Велосипед','Плавание','Футбол','Бокс','Единоборства','Другое'];
+const EXERCISES = ['Присед','Жим лёжа','Становая тяга','Жим стоя','Тяга в наклоне','Подтягивания','Отжимания','Отжимания на брусьях','Выпады','Румынская тяга','Тяга верхнего блока','Жим ногами','Сгибания на бицепс','Разгибания на трицепс','Махи гантелями','Планка'];
+$('woType').innerHTML = $('liveType').innerHTML = WO_TYPES.map(t=>`<option>${t}</option>`).join('');
+const e1rm = (w, r) => w ? w*(1+r/30) : r;
+function allSets(){ const out = []; DL.forEach(d => (d.gym||[]).forEach(s => out.push({ ...s, date:d.date }))); return out; }
+function lastSetOf(ex){
+  const k = ex.trim().toLowerCase(); if (!k) return null;
+  for (let i = DL.length-1; i >= 0; i--){ const g = (DL[i].gym||[]).filter(s => String(s.ex).toLowerCase() === k); if (g.length) return { date:DL[i].date, sets:g }; }
+  return null;
+}
+function showExHint(prefill){
+  const ex = $('gEx').value, last = lastSetOf(ex);
+  if (!last){ $('gHint').textContent = ex.trim() ? 'Новое упражнение' : ''; return; }
+  const s = last.sets[last.sets.length-1];
+  $('gHint').textContent = (last.date === todayKey() ? 'Сегодня: ' : `В прошлый раз (${fmtD(last.date)}): `) + last.sets.map(x => (x.w ? x.w+'×' : '') + x.r).join(', ');
+  if (prefill){ $('gW').value = s.w || ''; $('gR').value = s.r || ''; }
+}
+$('gEx').addEventListener('change', () => showExHint(true));
+$('gEx').addEventListener('input', () => showExHint(qa('#exList option').some(o => o.value === $('gEx').value)));
+function addSet(ex, w, r){
+  const before = allSets().filter(s => String(s.ex).toLowerCase() === ex.toLowerCase());
+  const prevBest = before.length ? Math.max(...before.map(s=>e1rm(s.w,s.r))) : 0;
+  dayRec().gym.push({ ex, w, r }); saveDay();
+  toast(before.length && e1rm(w,r) > prevBest + 0.01 ? 'Новый рекорд!' : 'Подход записан');
+  render(); showExHint(false);
+}
+$('gAdd').onclick = () => {
+  const ex = $('gEx').value.trim().slice(0,60), w = num($('gW').value) || 0, r = Number($('gR').value);
+  if (!ex || !r){ toast('Укажи упражнение и повторы'); return; }
+  const known = [...new Set(allSets().map(s=>s.ex))].find(x => String(x).toLowerCase() === ex.toLowerCase());
+  addSet(known || ex, w, r);
+};
+function renderTrain(){
+  const sets = allSets(), names = [...new Set([...sets.map(s=>s.ex).reverse(), ...EXERCISES])];
+  $('exList').innerHTML = names.map(e=>`<option value="${esc(e)}">`).join('');
+  const t = tdy(), g = t.gym || [];
+  if (!g.length) $('todaySets').innerHTML = '<div class="empty">Подходов сегодня нет. Выбери упражнение выше — вес и повторы с прошлого раза подставятся сами.</div>';
+  else {
+    const groups = {}; g.forEach((s,i) => (groups[s.ex] = groups[s.ex] || []).push({ ...s, i }));
+    $('todaySets').innerHTML = Object.entries(groups).map(([ex, ss]) => { const l = ss[ss.length-1];
+      return `<div class="exgroup"><div class="exhead"><b>${esc(ex)}</b><button class="linkbtn" data-again="${l.i}">+ ещё ${l.w ? l.w+'×' : ''}${l.r}</button></div>` +
+      ss.map((s,n) => `<div class="setrow"><span>${n+1}. ${s.w ? s.w+' кг × ' : ''}${s.r} повт.</span><button class="x" data-gs="${s.i}" aria-label="Удалить подход">×</button></div>`).join('') + '</div>'; }).join('');
+    qa('[data-gs]').forEach(b => b.onclick = () => { dayRec().gym.splice(+b.dataset.gs, 1); saveDay(); render(); });
+    qa('[data-again]').forEach(b => b.onclick = () => { const s = g[+b.dataset.again]; addSet(s.ex, s.w, s.r); });
+  }
+  const idx = currentIdx(), rec = recovery(idx), st = strainOf(t), tg = target(rec);
+  $('tStrain').textContent = st.toFixed(1); $('tStrainT').textContent = `из 21 · цель ${tg[0]}–${tg[1]}`;
+  bar($('tStrainBar'), st/21);
+  $('tStrainHint').textContent = st >= tg[1] ? 'Цель выполнена с запасом — дальше восстановление.' : st >= tg[0] ? 'Цель на сегодня выполнена.' : `До цели ещё ${(tg[0]-st).toFixed(1)}. Считается по тренировкам, подходам и шагам.`;
+  const wos = t.workouts || [];
+  $('woList').innerHTML = wos.map((w,i) => `<div class="setrow"><span>${esc(w.type)} · ${w.min} мин${w.hr ? ' · '+w.hr+' уд/мин' : ''}</span><button class="x" data-wo="${i}" aria-label="Удалить">×</button></div>`).join('');
+  qa('[data-wo]').forEach(b => b.onclick = () => { dayRec().workouts.splice(+b.dataset.wo, 1); saveDay(); render(); });
+  if (document.activeElement !== $('stepsIn')) $('stepsIn').value = t.steps ?? '';
+  const used = [...new Set(sets.map(s=>s.ex))], cur = $('progEx').value;
+  $('progEx').innerHTML = used.length ? used.map(e=>`<option ${e===cur?'selected':''}>${esc(e)}</option>`).join('') : '<option>—</option>';
+  const ex = $('progEx').value, byDay = {};
+  sets.filter(s=>s.ex===ex).forEach(s => { byDay[s.date] = Math.max(byDay[s.date]||0, e1rm(s.w,s.r)); });
+  line($('progChart'), Object.entries(byDay).sort().slice(-12).map(([d,v])=>({d,v})), 'var(--strain)', v=>r0(v), 'Сделай упражнение хотя бы в 2 разных дня — появится график роста');
+  const pr = used.map(ex => { const ss = sets.filter(s=>s.ex===ex); const best = ss.reduce((b,s)=> e1rm(s.w,s.r) > e1rm(b.w,b.r) ? s : b, ss[0]);
+    return { ex, best, e:e1rm(best.w,best.r), maxW: Math.max(...ss.map(s=>s.w||0)) }; }).sort((a,b)=>b.e-a.e);
+  $('records').innerHTML = pr.length ? pr.map(p => row(esc(p.ex), p.best.w ? `${r0(p.e)} кг` : `${p.best.r} повт.`, p.best.w ? `<small>макс. ${p.maxW} кг · ${fmtD(p.best.date)}</small>` : `<small>${fmtD(p.best.date)}</small>`)).join('')
+    : '<div class="empty">Записывай подходы — здесь появятся рекорды</div>';
+  if (document.activeElement !== $('bwIn')) $('bwIn').value = t.weight ?? '';
+  line($('bwChart'), DL.filter(d=>d.weight).slice(-20).map(d=>({d:d.date, v:d.weight})), 'var(--text)', v=>v.toFixed(1), 'Взвешивайся утром — здесь появится график веса');
+  renderLive();
+}
+$('progEx').onchange = renderTrain;
+$('woAdd').onclick = () => {
+  const min = Number($('woMin').value), hr = Number($('woHr').value) || null;
+  if (!min){ toast('Укажи минуты'); return; }
+  dayRec().workouts.push({ type:$('woType').value, min, hr }); $('woMin').value = ''; $('woHr').value = '';
+  saveDay(); render(); toast('Тренировка добавлена');
+};
+$('stepsSave').onclick = () => { const v = Number($('stepsIn').value); dayRec().steps = v || null; saveDay(); render(); toast('Шаги сохранены'); };
+$('bwSave').onclick = () => { const v = num($('bwIn').value); if (!v || v < 25 || v > 300){ toast('Проверь вес'); return; } dayRec().weight = v; saveDay(); render(); toast('Вес сохранён'); };
+
+// таймер тренировки: время старта хранится в настройках — переживёт закрытие приложения
+let liveTimer = null;
+const mmss = s => `${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`;
+function renderLive(){
+  const L = S.live;
+  $('liveIdle').hidden = !!L; $('liveRun').hidden = !L;
+  clearInterval(liveTimer);
+  if (L){
+    const tick = () => { const s = Math.max(0, r0((Date.now()-L.t0)/1000)); $('liveTime').textContent = s >= 3600 ? `${Math.floor(s/3600)}:${mmss(s%3600)}` : mmss(s); };
+    tick(); liveTimer = setInterval(tick, 1000);
+    $('liveInfo').textContent = `${L.type} · подходы записывай ниже`;
+  }
+}
+$('liveStart').onclick = () => { S.live = { t0: Date.now(), type: $('liveType').value }; BT.liveSum = 0; BT.liveN = 0; saveS(); renderLive(); toast('Поехали'); };
+$('liveCancel').onclick = () => { S.live = null; saveS(); renderLive(); };
+$('liveStop').onclick = () => {
+  const L = S.live; if (!L) return;
+  const min = r0((Date.now()-L.t0)/60000);
+  S.live = null; saveS();
+  if (min < 1){ renderLive(); toast('Меньше минуты — не сохраняю'); return; }
+  const hr = Number($('liveHr').value) || (BT.liveN > 30 ? r0(BT.liveSum/BT.liveN) : null); $('liveHr').value = '';
+  dayRec().workouts.push({ type:L.type, min, hr }); saveDay(); render();
+  toast(`Сохранено: ${min} мин`);
+};
+
+// ================= ПОКАЗАТЕЛЬ =================
+let mKey = 'hr', mOffset = 0, mRangeN = 7;
+const mDate = () => keyOff(mOffset);
+function chartDay(el, k, pts, tipEl){
+  const W = 340, H = 190, L = 34, R = 10, T = 10, B = 24;
+  if (!pts.length){ el.innerHTML = '<div class="empty">Замеров за этот день нет. Добавь ниже или импортируй из «Здоровья» в настройках.</div>'; tipEl.textContent = ''; return; }
+  const bp = k === 'bp', vals = bp ? pts.flatMap(p=>[p[1],p[2]]) : pts.map(p=>p[1]), zk = METRICS[k].daily;
+  let lo = Math.min(...vals), hi = Math.max(...vals);
+  const pad = Math.max((hi-lo)*0.15, k==='temp' ? 0.3 : k==='spo2' ? 1 : 3); lo -= pad; hi += pad;
+  if (k === 'spo2') hi = Math.min(hi, 101);
+  const X = m => L + m/1440*(W-L-R), Y = v => T + (hi-v)/(hi-lo)*(H-T-B);
+  let g = '';
+  if (k !== 'hr') zoneBands(zk).forEach(([a,b,z]) => { const y1 = Y(Math.min(b,hi)), y2 = Y(Math.max(a,lo)); if (y2 > y1) g += `<rect x="${L}" y="${y1}" width="${W-L-R}" height="${y2-y1}" style="fill:${ZCOL[z]};opacity:.10"/>`; });
+  for (let i = 0; i <= 4; i++){ const v = lo + (hi-lo)*i/4, y = Y(v); g += `<line x1="${L}" x2="${W-R}" y1="${y}" y2="${y}" style="stroke:var(--line)" stroke-width="1"/><text x="${L-6}" y="${y+3}" text-anchor="end" style="fill:var(--dim)" font-size="9" font-family="Inter,system-ui">${k==='temp'?v.toFixed(1):r0(v)}</text>`; }
+  [0,6,12,18,24].forEach(h => g += `<text x="${X(h*60)}" y="${H-6}" text-anchor="${h===24?'end':'middle'}" style="fill:var(--dim)" font-size="9" font-family="Inter,system-ui">${String(h).padStart(2,'0')}:00</text>`);
+  const ln = (i, color) => { let d = '', prev = null; pts.forEach(p => { d += `${(prev==null || p[0]-prev > 40) ? 'M' : 'L'}${X(p[0]).toFixed(1)} ${Y(p[i]).toFixed(1)} `; prev = p[0]; }); return `<path d="${d}" fill="none" style="stroke:${color}" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>`; };
+  g += bp ? ln(1,'var(--text)') + ln(2,'var(--mute)') : ln(1, k==='hr' ? 'var(--r)' : 'var(--text)');
+  pts.forEach(p => { const z = k==='hr' ? null : zone(zk, bp ? [p[1],p[2]] : p[1]);
+    if (pts.length <= 60 || z === 'r') g += `<circle cx="${X(p[0])}" cy="${Y(p[1])}" r="${pts.length<=60?3:2}" style="fill:${z?ZCOL[z]:'var(--text)'}"/>`;
+    if (bp && pts.length <= 60) g += `<circle cx="${X(p[0])}" cy="${Y(p[2])}" r="3" style="fill:var(--mute)"/>`; });
+  el.innerHTML = `<svg class="chart" viewBox="0 0 ${W} ${H}">${g}<line class="cur" x1="0" x2="0" y1="${T}" y2="${H-B}" style="stroke:var(--mute);display:none" stroke-width="1"/></svg>`;
+  const svg = el.querySelector('svg'), cur = svg.querySelector('.cur');
+  const show = ev => { const r = svg.getBoundingClientRect(), cx = ((ev.touches ? ev.touches[0].clientX : ev.clientX) - r.left) / r.width * W;
+    const m = (cx-L)/(W-L-R)*1440; let best = pts[0]; pts.forEach(p => { if (Math.abs(p[0]-m) < Math.abs(best[0]-m)) best = p; });
+    cur.setAttribute('x1', X(best[0])); cur.setAttribute('x2', X(best[0])); cur.style.display = 'block';
+    const z = k==='hr' ? null : zone(zk, bp ? [best[1],best[2]] : best[1]);
+    tipEl.innerHTML = `${hm(best[0])} · <b style="color:var(--text)">${bp ? best[1]+'/'+best[2] : fmtVal(zk, best[1])}</b> ${METRICS[k].unit}${z?` · <span style="color:${ZCOL[z]}">${ZTXT[z].toLowerCase()}</span>`:''}`; };
+  svg.addEventListener('pointermove', show); svg.addEventListener('pointerdown', show); svg.addEventListener('touchmove', show, { passive:true });
+  tipEl.textContent = 'Проведи пальцем по графику';
+}
+function renderMetric(){
+  const M = METRICS[mKey]; if (!M) return;
+  const key = mDate(), d = days[key] || { date:key }, zk = M.daily;
+  $('mDay').textContent = mOffset === 0 ? 'Сегодня' : mOffset === 1 ? 'Вчера' : new Date(key+'T12:00').toLocaleDateString('ru-RU',{weekday:'short',day:'numeric',month:'short'});
+  $('mNext').disabled = mOffset === 0;
+  const v = dayVal(d, zk), z = zone(zk, v);
+  $('mVal').textContent = fmtVal(zk, v); $('mUnit').textContent = M.unit;
+  $('mZone').textContent = z ? ZTXT[z] : 'нет данных';
+  $('mZone').style.background = z ? `color-mix(in srgb, ${ZCOL[z]} 18%, transparent)` : 'var(--card2)'; $('mZone').style.color = z ? ZCOL[z] : 'var(--mute)';
+  const pts = ((d.samples||{})[M.sample] || []).slice().sort((a,b)=>a[0]-b[0]);
+  chartDay($('mChart'), mKey, pts, $('mTip'));
+  if (pts.length){ const vs = pts.map(p=>p[1]), f = x => mKey==='temp' ? x.toFixed(1) : r0(x);
+    $('mStats').innerHTML = `<div><b>${f(Math.min(...vs))}</b><span>мин</span></div><div><b>${f(avg(vs))}</b><span>среднее</span></div><div><b>${f(Math.max(...vs))}</b><span>макс</span></div>`;
+  } else $('mStats').innerHTML = '';
+  $('mInput').placeholder = M.input; $('mInput').type = mKey==='bp' ? 'text' : 'number'; $('mInput').inputMode = mKey==='bp' ? 'numeric' : 'decimal';
+  if (!$('mTime').value) $('mTime').value = nowHM();
+  const list = []; for (let i = mRangeN-1; i >= 0; i--){ const k = keyOff(i), dd = days[k], vv = dd ? dayVal(dd, zk) : null, zz = zone(zk, vv); list.push({ key:k, v: vv==null ? null : (zk==='bp' ? vv[0] : vv), c: zz ? ZCOL[zz] : 'var(--mute)' }); }
+  bars($('mDays'), list, 'var(--mute)', x => zk==='temp' ? x.toFixed(1) : r0(x), { zero:false });
+  const zt = zoneText(zk);
+  $('mZones').innerHTML = ['g','y','r'].map(x => `<div class="zrow"><i style="background:${ZCOL[x]}"></i>${ZTXT[x]}<span>${zt[x]} ${M.unit}</span></div>`).join('');
+  $('mNote').textContent = ZNOTE[zk] || '';
+}
+$('mPrev').onclick = () => { mOffset++; renderMetric(); };
+$('mNext').onclick = () => { mOffset = Math.max(0, mOffset-1); renderMetric(); };
+qa('#mRange button').forEach(b => b.onclick = () => { mRangeN = +b.dataset.r; qa('#mRange button').forEach(x=>x.classList.toggle('on', x===b)); renderMetric(); });
+$('mAdd').onclick = () => {
+  const M = METRICS[mKey], t = toMin($('mTime').value), raw = $('mInput').value.trim();
+  if (t == null || !raw){ toast('Укажи время и значение'); return; }
+  const key = mDate(), r = dayRec(key); r.samples = r.samples || {}; const arr = r.samples[M.sample] = r.samples[M.sample] || [];
+  if (mKey === 'bp'){ const b = parseBp(raw); if (!b){ toast('Формат: 126/69'); return; } arr.push([t, b[0], b[1]]); }
+  else { const n = num(raw); if (!isFinite(n)){ toast('Проверь число'); return; } arr.push([t, n]); }
+  arr.sort((a,b)=>a[0]-b[0]); saveDay(key); $('mInput').value = ''; toast('Замер добавлен'); render();
+};
+
+// ================= ПЕРВЫЙ ЗАПУСК =================
+const SETUP = [
+  { k:'birth', q:'Дата рождения', h:'Возраст посчитается сам — от него зависят нормы пульса, HRV и сна', t:'date' },
+  { k:'height', q:'Рост', h:'см', t:'number' },
+  { k:'weight', q:'Вес', h:'кг', t:'number' }
+];
+let si = 0, draft = null;
+function renderSetup(){
+  if (!draft) draft = { birth:S.birth || '', height:S.height || '', weight:S.weight || '' };
+  const s = SETUP[si], inp = $('sInput');
+  $('sdots').innerHTML = SETUP.map((_,i)=>`<i class="${i<=si?'on':''}"></i>`).join('');
+  $('sLabel').textContent = s.q; $('sHint').textContent = s.h;
+  inp.type = s.t; inp.inputMode = s.t === 'number' ? 'decimal' : 'text';
+  if (s.t === 'date'){ inp.max = todayKey(); inp.min = '1930-01-01'; } else { inp.removeAttribute('max'); inp.removeAttribute('min'); }
+  inp.style.fontSize = s.t === 'date' ? '24px' : '32px';
+  inp.value = draft[s.k] ?? '';
+  updAge();
+  $('sPrev').disabled = si === 0; $('sNext').textContent = si === SETUP.length-1 ? 'Готово' : 'Далее';
+}
+function updAge(){ const a = SETUP[si].t === 'date' ? ageFromBirth($('sInput').value) : null; $('sAge').textContent = a != null && a >= 0 ? `Тебе ${a} лет` : ''; }
+$('sInput').oninput = updAge;
+function sStore(){ const s = SETUP[si], v = $('sInput').value; if (v === '') return; draft[s.k] = s.t === 'date' ? v : num(v); }
+$('sNext').onclick = () => {
+  sStore();
+  if (!draft[SETUP[si].k]){ toast('Введи значение'); return; }
+  if (si < SETUP.length-1){ si++; renderSetup(); return; }
+  const a = ageFromBirth(draft.birth);
+  if (a == null || a < 5 || a > 100){ toast('Проверь дату рождения'); si = 0; renderSetup(); return; }
+  if (!(draft.height > 100 && draft.height < 250)){ toast('Проверь рост'); si = 1; renderSetup(); return; }
+  if (!(draft.weight > 25 && draft.weight < 300)){ toast('Проверь вес'); si = 2; renderSetup(); return; }
+  Object.assign(S, { birth:draft.birth, height:draft.height, weight:draft.weight }); saveS(); draft = null;
+  toast('Сохранено'); location.hash = '#home';
+};
+$('sPrev').onclick = () => { sStore(); si = Math.max(0, si-1); renderSetup(); };
+$('sInput').onkeydown = e => { if (e.key === 'Enter') $('sNext').click(); };
+
+// ================= НАСТРОЙКИ =================
+function renderPrefs(){
+  const b = bmi(), z = zone('bmi', b);
+  $('normList').innerHTML = [row('Возраст', S.birth ? age()+' лет' : '—'), row('Рост', S.height ? S.height+' см' : '—'), row('Вес', latestWeight()+' кг'),
+    row('Индекс массы тела', b ?? '—', z ? `<small style="color:${ZCOL[z]}">${ZTXT[z].toLowerCase()}</small>` : ''),
+    row('Норма сна', fmtH(needBase())), row('Макс. пульс', r0(maxHr())+' уд/мин')].join('');
+  $('aiKeyCard').hidden = IN_CLAUDE;
+  if (!IN_CLAUDE){ let k = null; try{ k = localStorage.getItem(AIKEY); }catch(e){}
+    $('aiKeyNote').textContent = k ? `Ключ сохранён (…${k.slice(-4)}). Фото еды работает.` : 'Ключ не добавлен.'; $('aiKeyDel').hidden = !k; }
+  $('storeInfo').textContent = Store.mode === 'db' ? `Данные хранятся в твоём аккаунте Claude и видны только тебе. Дней в истории: ${DL.length}.` : `Данные хранятся только в этом браузере. Дней в истории: ${DL.length}. Делай копию время от времени.`;
+}
+$('copyData').onclick = async () => {
+  const text = JSON.stringify({ pulse:2, days, settings:S });
+  try{ await navigator.clipboard.writeText(text); toast('Скопировано'); }
+  catch(e){ $('pasteBox').hidden = false; $('pasteArea').value = text; $('pasteArea').select(); toast('Выдели текст и скопируй'); }
+};
+$('aiKeySave').onclick = () => { const k = $('aiKey').value.trim(); if (!/^sk-ant-/.test(k)){ toast('Ключ начинается с sk-ant-'); return; }
+  try{ localStorage.setItem(AIKEY, k); }catch(e){} $('aiKey').value = ''; initAI(); render(); toast('Ключ сохранён'); };
+$('aiKeyDel').onclick = () => { try{ localStorage.removeItem(AIKEY); }catch(e){} initAI(); render(); toast('Ключ удалён'); };
+$('pasteToggle').onclick = () => { $('pasteBox').hidden = !$('pasteBox').hidden; };
+$('pasteApply').onclick = async () => {
+  let o; try{ o = JSON.parse($('pasteArea').value); }catch(e){ toast('Не получилось прочитать'); return; }
+  const list = Array.isArray(o) ? o : Array.isArray(o.days) ? o.days : (o.days && typeof o.days === 'object') ? Object.values(o.days) : null;
+  if (!list){ toast('Не получилось прочитать'); return; }
+  const st = o.settings || {};
+  if (st.norm) Object.assign(S, { birth:st.norm.birth, height:st.norm.height, weight:st.norm.weight });
+  ['birth','height','weight','sex','foodGoal'].forEach(k => { if (st[k] != null) S[k] = st[k]; });
+  saveS();
+  let n = 0;
+  for (const d of list){ if (!d || !/^\d{4}-\d{2}-\d{2}$/.test(d.date||'')) continue; days[d.date] = d; n++; await writeDoc(d.date); }
+  cacheLocal(); render(); toast(`Загружено дней: ${n}`);
+};
+
+// импорт из Apple Здоровья
+const HK = { HeartRate:'hr', RestingHeartRate:'rhr', HeartRateVariabilitySDNN:'hrv', OxygenSaturation:'spo2', AppleSleepingWristTemperature:'temp',
+  StepCount:'steps', BloodPressureSystolic:'sys', BloodPressureDiastolic:'dia', SleepAnalysis:'sleep' };
+const parseHK = s => new Date(s.replace(' ', 'T').replace(/ ([+-]\d{2})(\d{2})$/, '$1:$2'));
+function loadScript(src){ return new Promise((res, rej) => { const s = document.createElement('script'); s.src = src; s.onload = res; s.onerror = rej; document.head.appendChild(s); }); }
+async function importHealth(file){
+  const st = t => $('impStatus').textContent = t;
+  const since = keyOff(60), A = {}; let count = 0;
+  const get = date => A[date] = A[date] || { hr:{}, hrv:[], spo2:[], temp:[], steps:{}, rhr:[], sys:{}, dia:{}, sleep:[] };
+  const rT = /type="HK(?:Quantity|Category)TypeIdentifier(\w+)"/, rS = /startDate="([^"]+)"/, rE = /endDate="([^"]+)"/, rV = /value="([^"]+)"/;
+  const handle = a => {
+    const tm = a.match(rT); if (!tm) return; const k = HK[tm[1]]; if (!k) return;
+    const sd = (a.match(rS)||[])[1]; if (!sd || sd.slice(0,10) < since) return;
+    const val = (a.match(rV)||[])[1]; if (val == null) return;
+    const date = sd.slice(0,10), min = (+sd.slice(11,13))*60 + (+sd.slice(14,16)), bin = Math.floor(min/10)*10, D = get(date); count++;
+    if (k === 'sleep'){ const ed = (a.match(rE)||[])[1]; if (ed) D.sleep.push([sd, ed, val]); return; }
+    let v = Number(val); if (!isFinite(v)) return;
+    if (k === 'hr'){ const b = D.hr[bin] = D.hr[bin] || [0,0]; b[0] += v; b[1]++; }
+    else if (k === 'steps') D.steps[bin] = (D.steps[bin]||0) + v;
+    else if (k === 'sys' || k === 'dia') D[k][min] = v;
+    else { if (k === 'spo2' && v <= 1) v *= 100; D[k].push([min, k==='temp' ? Math.round(v*10)/10 : r0(v)]); }
+  };
+  let buf = '';
+  const re = /<Record\b([^>]*?)\/?>/g;
+  const feed = chunk => { buf += chunk; const last = buf.lastIndexOf('>'); if (last < 0) return; const part = buf.slice(0, last+1); buf = buf.slice(last+1); re.lastIndex = 0; let m; while ((m = re.exec(part))) handle(m[1]); };
+  try{
+    if (/\.zip$/i.test(file.name) || (file.type||'').includes('zip')){
+      st('Распаковываю архив…');
+      if (!window.JSZip) await loadScript('https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js');
+      const zip = await JSZip.loadAsync(file);
+      const entry = Object.values(zip.files).find(f => /(^|\/)export\.xml$/i.test(f.name));
+      if (!entry) throw new Error('В архиве нет export.xml');
+      await new Promise((res, rej) => { entry.internalStream('string').on('data', (c, meta) => { feed(c); if (meta) st(`Читаю… ${r0(meta.percent)}%`); }).on('error', rej).on('end', res).resume(); });
+    } else {
+      const reader = file.stream().getReader(), dec = new TextDecoder(); let read = 0;
+      for (;;){ const { done, value } = await reader.read(); if (done) break; read += value.length; feed(dec.decode(value, { stream:true })); st(`Читаю… ${r0(read/file.size*100)}%`); }
+    }
+  }catch(e){ st('Не получилось прочитать файл: ' + (e.message || e)); return; }
+  const nights = {};
+  Object.values(A).forEach(D => D.sleep.forEach(([s, e, cat]) => {
+    if (/InBed|Awake/.test(cat)) return; const end = parseHK(e), start = parseHK(s); if (isNaN(end)) return;
+    if (+e.slice(11,13) >= 15) return;
+    const key = e.slice(0,10), N = nights[key] = nights[key] || { s:null, e:null };
+    if (!N.s || start < N.s){ N.s = start; N.bed = s.slice(11,16); } if (!N.e || end > N.e){ N.e = end; N.wake = e.slice(11,16); }
+  }));
+  const touched = [];
+  new Set([...Object.keys(A), ...Object.keys(nights)]).forEach(date => {
+    if (date < since) return;
+    const D = A[date] || get(date), N = nights[date], r = dayRec(date), smp = r.samples = r.samples || {};
+    const hr = Object.entries(D.hr).map(([b,[s,n]]) => [Number(b), r0(s/n)]).sort((a,b)=>a[0]-b[0]); if (hr.length) smp.hr = hr;
+    ['hrv','spo2','temp'].forEach(k => { if (D[k].length) smp[k] = D[k].sort((a,b)=>a[0]-b[0]); });
+    const steps = Object.entries(D.steps).map(([b,v]) => [Number(b), r0(v)]).sort((a,b)=>a[0]-b[0]); if (steps.length){ smp.steps = steps; if (r.steps == null) r.steps = steps.reduce((a,x)=>a+x[1],0); }
+    const bp = Object.keys(D.sys).filter(m => D.dia[m] != null).map(m => [Number(m), r0(D.sys[m]), r0(D.dia[m])]).sort((a,b)=>a[0]-b[0]); if (bp.length) smp.bp = bp;
+    if (D.rhr.length && r.rhr == null) r.rhr = r0(avg(D.rhr.map(x=>x[1])));
+    if (N && !r.bed){ r.bed = N.bed; r.wake = N.wake; }
+    touched.push(date);
+  });
+  cacheLocal(); render();
+  st(`Сохраняю ${touched.length} дн.…`);
+  for (const d of touched) await writeDoc(d);
+  st(count ? `Готово: ${count.toLocaleString('ru-RU')} замеров за ${touched.length} дн.` : 'В файле нет подходящих данных за 60 дней. Проверь, что приложение браслета пишет данные в «Здоровье».');
+}
+$('impFile').onchange = e => { const f = e.target.files[0]; if (f) importHealth(f); e.target.value = ''; };
+
+// ================= УСТРОЙСТВО =================
+const DRAIN = 14;  // примерный расход заряда, % в день
+const dev = () => S.device || (S.device = { name:'Loop', battery:null, batteryAt:null });
+const devName = () => { const n = dev().name; return (!n || n === 'Nova') ? 'Loop' : n; };
+function batteryNow(){ const D = dev(); if (D.battery == null || !D.batteryAt) return null; return clamp(r0(D.battery - (Date.now()-D.batteryAt)/864e5*DRAIN), 0, 100); }
+const batColor = b => b == null ? 'var(--dim)' : b > 40 ? 'var(--g)' : b > 20 ? 'var(--y)' : 'var(--r)';
+function agoText(date){ if (!date) return ''; if (date === todayKey()) return 'сегодня'; if (date === keyOff(1)) return 'вчера'; return fmtD(date); }
+function lastOf(fn){ for (let i = DL.length-1; i >= 0; i--){ const v = fn(DL[i]); if (v != null) return { v, date:DL[i].date }; } return null; }
+const SENSORS = [
+  { n:'Пульс', go:'m-hr', f:d=>dayVal(d,'rhr'), fmt:v=>v+' уд/мин', z:v=>zone('rhr',v) },
+  { n:'HRV', go:'m-hrv', f:d=>dayVal(d,'hrv'), fmt:v=>v+' мс', z:v=>zone('hrv',v) },
+  { n:'Кислород SpO₂', go:'m-spo2', f:d=>dayVal(d,'spo2'), fmt:v=>v+'%', z:v=>zone('spo2',v) },
+  { n:'Давление', go:'m-bp', f:d=>dayVal(d,'bp'), fmt:v=>v.join('/'), z:v=>zone('bp',v) },
+  { n:'Температура кожи', go:'m-temp', f:d=>dayVal(d,'temp'), fmt:v=>Number(v).toFixed(1)+' °C', z:v=>zone('temp',v) },
+  { n:'Стресс', go:'m-stress', f:d=>dayVal(d,'stress'), fmt:v=>String(v), z:v=>zone('stress',v) },
+  { n:'Сон', go:'sleep', f:d=>sleepMin(d), fmt:v=>fmtH(v), z:v=>{ const p = v/needBase(); return p >= 0.9 ? 'g' : p >= 0.75 ? 'y' : 'r'; } },
+  { n:'Шаги', go:'train', f:d=>dayVal(d,'steps'), fmt:v=>r0(v).toLocaleString('ru-RU'), z:v=>v >= 8000 ? 'g' : v >= 5000 ? 'y' : 'r' }
+];
+// ---- Bluetooth (работает в браузере Bluefy; внутри Claude недоступен) ----
+const HAS_BT = !!navigator.bluetooth;
+const BT = { dev:null, connected:false, busy:false, hr:null, hasHr:false, bin:null, sum:0, n:0, lastSave:0, liveSum:0, liveN:0 };
+const BT_SERVICES = ['battery_service','heart_rate','device_information'];
+function onBtDisc(){ BT.connected = false; BT.hr = null; render(); }
+function onHr(v){
+  let bpm; try{ const f = v.getUint8(0); bpm = (f & 1) ? v.getUint16(1, true) : v.getUint8(1); }catch(e){ return; }
+  if (!bpm || bpm < 30 || bpm > 230) return;
+  BT.hr = bpm;
+  if (S.live){ BT.liveSum += bpm; BT.liveN++; }
+  // складываем в 10-минутные замеры дня, как браслет
+  const now = new Date(), bin = Math.floor((now.getHours()*60 + now.getMinutes())/10)*10;
+  if (BT.bin !== bin){ BT.bin = bin; BT.sum = 0; BT.n = 0; }
+  BT.sum += bpm; BT.n++;
+  const r = dayRec(); r.samples = r.samples || {}; const a = r.samples.hr = r.samples.hr || [];
+  const val = r0(BT.sum/BT.n), last = a[a.length-1];
+  if (last && last[0] === bin) last[1] = val; else { a.push([bin, val]); a.sort((x,y)=>x[0]-y[0]); }
+  if (Date.now() - BT.lastSave > 60000){ BT.lastSave = Date.now(); saveDay(); }
+  $('dvScreen').textContent = bpm;
+  if (S.live) $('liveInfo').textContent = `${S.live.type} · пульс ${bpm}`;
+}
+async function btConnect(pick){
+  if (!HAS_BT || BT.busy) return;
+  BT.busy = true; renderConn();
+  try{
+    let d = BT.dev;
+    if (pick || !d) d = await navigator.bluetooth.requestDevice({ acceptAllDevices:true, optionalServices:BT_SERVICES });
+    BT.dev = d; d.ongattserverdisconnected = onBtDisc;
+    const g = await d.gatt.connect();
+    BT.connected = true;
+    Object.assign(dev(), { btId: d.id, btName: d.name || '' });
+    try{
+      const ch = await (await g.getPrimaryService('battery_service')).getCharacteristic('battery_level');
+      const setBat = v => { Object.assign(dev(), { battery: v, batteryAt: Date.now() }); saveS(); renderDevice(); };
+      setBat((await ch.readValue()).getUint8(0));
+      try{ ch.oncharacteristicvaluechanged = e => setBat(e.target.value.getUint8(0)); await ch.startNotifications(); }catch(e){}
+    }catch(e){ saveS(); }
+    try{
+      const ch = await (await g.getPrimaryService('heart_rate')).getCharacteristic('heart_rate_measurement');
+      ch.oncharacteristicvaluechanged = e => onHr(e.target.value); await ch.startNotifications(); BT.hasHr = true;
+    }catch(e){ BT.hasHr = false; }
+    toast('Браслет подключён');
+  }catch(e){
+    BT.connected = false;
+    if (!(e && e.name === 'NotFoundError')) toast(pick ? 'Не удалось подключиться. Закрой G Band и попробуй снова' : 'Браслет не отвечает');
+  }
+  BT.busy = false; render();
+}
+// при открытии — переподключиться к уже выбранному браслету, если браузер это разрешает
+async function btAuto(){
+  if (!HAS_BT || BT.connected || BT.busy || !navigator.bluetooth.getDevices) return;
+  try{ const ds = await navigator.bluetooth.getDevices(); const d = ds.find(x => x.id === dev().btId) || ds[0]; if (d){ BT.dev = d; await btConnect(false); } }catch(e){}
+}
+function renderConn(){
+  const el = $('dvConn');
+  if (!HAS_BT){
+    el.innerHTML = IN_CLAUDE
+      ? `<div style="display:flex;align-items:center;gap:8px;font-weight:600"><span class="dot" style="background:var(--y);box-shadow:0 0 8px var(--y)"></span>Синхронизация вручную</div><div class="sub" style="margin-top:6px">Внутри приложения Claude телефон не даёт доступ к Bluetooth. Для автоподключения открой браузерную версию Pulse в Bluefy.</div>`
+      : `<div style="display:flex;align-items:center;gap:8px;font-weight:600"><span class="dot" style="background:var(--dim)"></span>Bluetooth недоступен</div><div class="sub" style="margin-top:6px">На iPhone открой Pulse в бесплатном браузере <b>Bluefy</b> — там браслет подключается.</div>`;
+    return;
+  }
+  const st = BT.connected ? ['var(--g)', 'Подключён' + (BT.dev && BT.dev.name ? ' · ' + esc(BT.dev.name) : '')] : BT.busy ? ['var(--y)', 'Подключаюсь…'] : ['var(--dim)', 'Не подключён'];
+  const txt = BT.connected
+    ? (BT.hasHr ? 'Живой пульс идёт с браслета и сохраняется в график.' : 'Связь есть. Полную загрузку данных Pulse научится делать после разбора отчёта сканера.')
+    : 'Перед подключением закрой G Band — браслет работает только с одним приложением.';
+  el.innerHTML = `<div style="display:flex;align-items:center;gap:8px;font-weight:600"><span class="dot" style="background:${st[0]};box-shadow:0 0 8px ${st[0]}"></span>${st[1]}</div>
+    <div class="sub" style="margin-top:6px">${txt}</div>
+    <div class="btns">${BT.connected ? '<button class="btn ghost" id="btOff">Отключить</button>' : `<button class="btn" id="btOn" ${BT.busy?'disabled':''}>Подключить браслет</button>`}${IN_CLAUDE ? '' : '<a class="btn ghost" href="scanner.html" style="text-decoration:none">Сканер</a>'}</div>`;
+  if ($('btOn')) $('btOn').onclick = () => btConnect(true);
+  if ($('btOff')) $('btOff').onclick = () => { try{ BT.dev.gatt.disconnect(); }catch(e){} onBtDisc(); };
+}
+
+function renderDevice(){
+  const b = batteryNow(), D = dev(), name = devName();
+  $('devName').textContent = name; $('devBat').textContent = b == null ? '' : b + '%';
+  $('devDot').style.color = BT.connected ? 'var(--g)' : batColor(b);
+  renderConn();
+  $('dvName').textContent = name;
+  $('dvBat').textContent = b == null ? '—' : b + '%';
+  bar($('dvBatBar'), (b ?? 0)/100, batColor(b));
+  $('dvBatT').textContent = b != null
+    ? (BT.connected ? 'Заряд приходит с браслета' : `Обновлено ${agoText(keyOf(D.batteryAt))} · хватит примерно на ${Math.max(0, Math.floor(b/DRAIN))} дн.`)
+    : (HAS_BT ? 'Подключи браслет — заряд подтянется сам' : 'Заряд подтянется сам при подключении браслета');
+  const hr = lastOf(d => dayVal(d,'rhr')); $('dvScreen').textContent = BT.hr || (hr ? hr.v : '—');
+  $('dvSensors').innerHTML = SENSORS.map(s => { const l = lastOf(s.f), z = l ? s.z(l.v) : null;
+    return `<div class="row" data-go="${s.go}" style="cursor:pointer"><span class="l">${s.n}</span><span class="r">${l ? `<span style="color:${z ? ZCOL[z] : 'var(--text)'}">${esc(s.fmt(l.v))}</span><small>${agoText(l.date)}</small>` : '<small>нет данных</small>'}</span></div>`; }).join('')
+    + `<div class="row"><span class="l">ЭКГ</span><span class="r"><small>после сканирования</small></span></div>`
+    + `<div class="row" style="justify-content:flex-start;gap:14px;font-size:12px;color:var(--mute)"><span><span class="dot" style="background:var(--g)"></span> идеально</span><span><span class="dot" style="background:var(--y)"></span> удовлетворительно</span><span><span class="dot" style="background:var(--r)"></span> плохо</span></div>`;
+  const t = tdy(), filled = SENSORS.filter(s => s.f(t) != null).length;
+  $('dvFill').textContent = `${filled} из ${SENSORS.length}`;
+  if (document.activeElement !== $('dvNameIn')) $('dvNameIn').value = name;
+}
+$('dvNameSave').onclick = () => { const v = $('dvNameIn').value.trim().slice(0,16) || 'Loop'; dev().name = v; saveS(); render(); toast('Название сохранено'); };
+
+// ================= роутер =================
+const TITLES = { home:'Сегодня', food:'Питание', train:'Тренировки', sleep:'Сон', device:'Устройство', morning:'Утренний ввод', metric:'', setup:'Мои данные', prefs:'Профиль' };
+const MAIN = ['home','food','train','sleep','device'];
+let lastMain = 'home';
+const view = () => { const v = (location.hash || '#home').slice(1); if (/^m-/.test(v) && METRICS[v.slice(2)]) return 'metric'; return TITLES[v] != null ? v : 'home'; };
+function render(){
+  sortDays();
+  renderHome(); renderFood(); renderTrain(); renderSleep(); renderPrefs(); renderDevice();
+  if (view() === 'metric') renderMetric();
+}
+function route(){
+  if (loaded && !(S.birth && S.height) && view() !== 'setup'){ location.hash = '#setup'; return; }
+  const v = view();
+  if (MAIN.includes(v)) lastMain = v;
+  if (v === 'metric'){ mKey = location.hash.slice(3); mOffset = 0; }
+  qa('.view').forEach(s => s.classList.toggle('on', s.id === 'v-'+v));
+  qa('nav a').forEach(a => a.classList.toggle('on', a.dataset.v === (MAIN.includes(v) ? v : lastMain)));
+  $('ttl').textContent = v === 'metric' ? METRICS[mKey].name : TITLES[v];
+  const sub = !MAIN.includes(v);
+  $('back').hidden = !sub || (v === 'setup' && !S.birth); $('date').hidden = sub;
+  $('devChip').hidden = v === 'device' || v === 'setup';
+  if (v === 'morning'){ qi = 0; renderQuick(); }
+  if (v === 'setup'){ si = 0; draft = null; renderSetup(); }
+  window.scrollTo(0, 0);
+  render();
+}
+$('back').onclick = () => { location.hash = '#' + lastMain; };
+document.addEventListener('click', e => { const el = e.target.closest('[data-go]'); if (el) location.hash = '#' + el.dataset.go; });
+window.addEventListener('hashchange', route);
+document.addEventListener('visibilitychange', () => { if (!document.hidden){ render(); btAuto(); } });
+
+route();
+initStore();
+initAI();
+btAuto();
+</script>
+
+</body>
+</html>

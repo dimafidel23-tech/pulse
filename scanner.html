@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#07070a">
+<title>Сканер браслета · Pulse</title>
+<style>
+:root{--bg:#07070a;--card:#13131a;--card2:#1c1c25;--line:#25252f;--text:#f5f5f7;--mute:#8d8d9a;--dim:#5a5a68;--g:#1fe08f;--y:#ff9a1f;--r:#ff4d6a;--b:#3d8bff;color-scheme:dark}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--text);font:15px/1.5 Inter,system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased}
+.wrap{max-width:560px;margin:0 auto;padding:max(14px,env(safe-area-inset-top)) max(16px,env(safe-area-inset-right)) calc(40px + env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left))}
+h1{font-size:26px;margin:6px 0 2px;letter-spacing:-.4px}
+.sub{color:var(--mute);font-size:13px}
+.card{background:var(--card);border-radius:20px;padding:16px;margin:10px 0}
+.step{display:flex;gap:12px;align-items:flex-start}
+.num{flex:0 0 28px;height:28px;border-radius:50%;background:var(--card2);display:grid;place-items:center;font-weight:700;font-size:14px}
+.step.done .num{background:var(--g);color:#04120b}
+.step.now .num{background:var(--b);color:#fff}
+.step>div>b{display:block;font-size:15px}
+.btn{width:100%;border:0;border-radius:14px;padding:15px;font:600 16px Inter,system-ui,sans-serif;background:var(--text);color:var(--bg);cursor:pointer;margin-top:12px}
+.btn.ghost{background:var(--card2);color:var(--text)}
+.btn:disabled{opacity:.35}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.tile{background:var(--card);border-radius:16px;padding:12px}
+.tile .k{color:var(--mute);font-size:12px}
+.tile .v{font-size:20px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bar{height:6px;border-radius:99px;background:var(--card2);overflow:hidden;margin-top:10px}
+.bar i{display:block;height:100%;width:0;background:var(--b);transition:width 1s linear}
+.warn{color:var(--y)}.err{color:var(--r)}.ok{color:var(--g)}
+details{background:var(--card);border-radius:20px;padding:14px 16px;margin:10px 0}
+summary{cursor:pointer;font-weight:600}
+.svc{border-top:1px solid var(--line);padding:10px 0}
+.svc:first-of-type{border-top:0}
+.mono{font:12px/1.45 ui-monospace,Menlo,Consolas,monospace;word-break:break-all}
+.ch{padding:8px 0 4px 10px;border-left:2px solid var(--line);margin:6px 0}
+.tag{display:inline-block;font-size:11px;padding:1px 7px;border-radius:99px;background:var(--card2);margin:2px 4px 0 0;color:var(--mute)}
+.row{display:flex;gap:6px;margin-top:6px}
+input{flex:1;min-width:0;background:var(--card2);border:1px solid transparent;border-radius:10px;color:var(--text);padding:9px 10px;font:13px ui-monospace,Menlo,monospace}
+.sm{width:auto;margin:0;padding:9px 12px;font-size:13px;border-radius:10px}
+#log{max-height:260px;overflow:auto;white-space:pre-wrap}
+textarea{width:100%;height:160px;background:var(--card2);border:0;border-radius:12px;color:var(--text);padding:10px;font:11px/1.4 ui-monospace,Menlo,monospace;margin-top:10px}
+a{color:var(--b)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="sub">Pulse</div>
+  <h1>Сканер браслета</h1>
+  <div class="sub">Узнаёт, как браслет передаёт данные. Нужен один раз, чтобы научить Pulse подключаться автоматически.</div>
+
+  <div class="card" id="noBt" hidden>
+    <b class="err">Этот браузер не умеет Bluetooth</b>
+    <div class="sub" style="margin-top:4px">На iPhone открой эту страницу в бесплатном браузере <b>Bluefy</b> из App Store. В Safari и Chrome на iPhone Bluetooth для сайтов не работает.</div>
+  </div>
+
+  <div class="card">
+    <div class="step now" id="s0"><div class="num">1</div><div><b>Отключи браслет от G Band</b>
+      <div class="sub">Браслет держит связь только с одним приложением. Открой G Band → профиль → устройство → «Отключить» (или «Отвязать»). Затем закрой G Band. Bluetooth на телефоне <b>не выключай</b>.</div></div></div>
+  </div>
+  <div class="card">
+    <div class="step" id="s1"><div class="num">2</div><div style="flex:1"><b>Подключись</b>
+      <div class="sub">Нажми кнопку и выбери браслет в списке. Обычно в названии модель, «Band» или цифры.</div>
+      <button class="btn" id="btnConnect">Подключить браслет</button></div></div>
+  </div>
+  <div class="card">
+    <div class="step" id="s2"><div class="num">3</div><div style="flex:1"><b>Минута наблюдения</b>
+      <div class="sub">Пока идёт таймер: открой на браслете замер пульса, подвигай рукой, нажми кнопку на браслете, можно запустить давление или кислород.</div>
+      <div class="bar"><i id="obsBar"></i></div>
+      <div class="sub" id="obsText" style="margin-top:6px">Начнётся после подключения</div></div></div>
+  </div>
+  <div class="card">
+    <div class="step" id="s3"><div class="num">4</div><div style="flex:1"><b>Отправь отчёт</b>
+      <div class="sub">Скопируй и вставь в чат с Claude. Личных данных там нет — только служебные коды браслета.</div>
+      <button class="btn" id="btnCopy" disabled>Скопировать отчёт</button>
+      <button class="btn ghost" id="btnShare" disabled hidden>Поделиться отчётом</button>
+      <textarea id="reportBox" readonly hidden aria-label="Отчёт"></textarea></div></div>
+  </div>
+
+  <div class="tiles">
+    <div class="tile"><div class="k">Устройство</div><div class="v" id="tName">—</div></div>
+    <div class="tile"><div class="k">Заряд</div><div class="v" id="tBat">—</div></div>
+    <div class="tile"><div class="k">Сервисов</div><div class="v" id="tSvc">—</div></div>
+    <div class="tile"><div class="k">Сообщений от браслета</div><div class="v" id="tNotif">0</div></div>
+  </div>
+
+  <details>
+    <summary>Подробности и ручные команды</summary>
+    <div class="sub" style="margin:8px 0">Для разбора. Ничего не отправляй браслету, если Claude не попросил.</div>
+    <div class="row"><input id="extra" placeholder="Доп. UUID сервисов через запятую"><button class="btn ghost sm" id="btnReconnect">Повторить</button></div>
+    <div id="services" style="margin-top:10px"></div>
+  </details>
+  <details open>
+    <summary>Журнал</summary>
+    <div id="log" class="mono" style="margin-top:8px"></div>
+  </details>
+  <div class="sub" style="text-align:center;margin-top:16px"><a href="./">← Вернуться в Pulse</a></div>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+// Сервисы, которые встречаются у недорогих браслетов. Web Bluetooth показывает только перечисленные.
+const COMMON = [
+  'generic_access','generic_attribute','device_information','battery_service','heart_rate','current_time','immediate_alert','link_loss','tx_power',
+  'running_speed_and_cadence','user_data','body_composition','health_thermometer','blood_pressure','pulse_oximeter','environmental_sensing',
+  0x1530,0x18d0,0x0af0,0x0af6,0x2760,0x3802,0x6006,0x7905,0x190e,0xa800,0xae00,0xae30,0xae3a,0xd0ff,0xd618,
+  0xfe59,0xfeba,0xfec7,0xfec8,0xfec9,0xfed0,0xfee0,0xfee1,0xfee7,0xfee8,0xfee9,0xfeea,0xfef5,
+  0xff00,0xff01,0xff10,0xff12,0xff20,0xffa0,0xffb0,0xffc0,0xffd0,0xffe0,0xffe5,0xfff0,0xfff5,0xfd00,0xfd01,
+  '6e400001-b5a3-f393-e0a9-e50e24dcca9e',
+  'be940000-7333-be46-b7ae-689e71722bd5',
+  'f000ffc0-0451-4000-b000-000000000000',
+  '000001ff-3c17-d293-8e48-14fe2e4da212',
+  '0000d0ff-3c17-d293-8e48-14fe2e4da212',
+  'de5bf728-d711-4e47-af26-65e3012a5dc7',
+  '00010203-0405-0607-0809-0a0b0c0d1910',
+  '00002760-08c2-11e1-9073-0e8ac72e1001',
+  '5833ff01-9b8b-5191-6142-22a4536ef123',
+  'c3e6fea0-e966-1000-8000-be99c223df6a'
+];
+const NAMES = { '1800':'Generic Access','1801':'Generic Attribute','180a':'Сведения об устройстве','180f':'Батарея','180d':'Пульс','1805':'Время','1802':'Сигнал','1810':'Давление','1809':'Термометр','1822':'Пульсоксиметр',
+  '2a00':'Имя','2a19':'Уровень заряда','2a37':'Пульс','2a24':'Модель','2a25':'Серийный номер','2a26':'Прошивка','2a27':'Железо','2a28':'Софт','2a29':'Производитель','2a50':'PnP ID',
+  '6e400002':'UART запись','6e400003':'UART уведомления' };
+let device = null, server = null, items = [], logLines = [], notifCount = 0, obsTimer = null;
+const short = u => { const m = String(u).match(/^0000([0-9a-f]{4})-0000-1000-8000-00805f9b34fb$/i); return m ? m[1].toLowerCase() : String(u).toLowerCase(); };
+const nameOf = u => { const s = short(u); return NAMES[s] || NAMES[s.slice(0,8)] || ''; };
+const bytes = dv => Array.from(new Uint8Array(dv.buffer, dv.byteOffset, dv.byteLength));
+const hex = dv => bytes(dv).map(b => b.toString(16).padStart(2,'0')).join(' ');
+const ascii = dv => bytes(dv).map(b => b >= 32 && b < 127 ? String.fromCharCode(b) : '.').join('');
+const ts = () => { const d = new Date(); return d.toTimeString().slice(0,8) + '.' + String(d.getMilliseconds()).padStart(3,'0'); };
+function log(msg, cls){
+  const line = `[${ts()}] ${msg}`; if (logLines.length < 1500) logLines.push(line);
+  const el = document.createElement('div'); if (cls) el.className = cls; el.textContent = line; $('log').appendChild(el);
+  while ($('log').childElementCount > 300) $('log').firstChild.remove();
+  $('log').scrollTop = $('log').scrollHeight;
+}
+function stepState(n){ for (let i = 0; i < 4; i++){ const s = $('s'+i); s.classList.toggle('done', i < n); s.classList.toggle('now', i === n); } }
+function interpret(uuid, dv){
+  const s = short(uuid);
+  try{
+    if (s === '2a19'){ const v = dv.getUint8(0); $('tBat').textContent = v + '%'; return v + '%'; }
+    if (s === '2a37'){ const f = dv.getUint8(0), bpm = (f & 1) ? dv.getUint16(1, true) : dv.getUint8(1); return bpm + ' уд/мин'; }
+    if (['2a00','2a24','2a25','2a26','2a27','2a28','2a29'].includes(s)) return '«' + new TextDecoder().decode(dv).replace(/\0/g,'') + '»';
+  }catch(e){}
+  return '';
+}
+function normUuid(s){ s = s.trim().toLowerCase().replace(/^0x/,''); if (/^[0-9a-f]{4}$/.test(s) || /^[0-9a-f]{8}$/.test(s)) return parseInt(s, 16); return s; }
+function parseHex(str){ const c = str.replace(/0x/gi,'').replace(/[^0-9a-f]/gi,''); if (!c || c.length % 2) throw new Error('Нужны пары hex-символов: AB 01 FF'); return new Uint8Array(c.match(/../g).map(h => parseInt(h,16))); }
+
+async function connect(){
+  if (!navigator.bluetooth){ $('noBt').hidden = false; return; }
+  try{
+    const extra = $('extra').value.split(/[\s,;]+/).filter(Boolean).map(normUuid);
+    log('Ищу устройства…');
+    device = await navigator.bluetooth.requestDevice({ acceptAllDevices:true, optionalServices:[...COMMON, ...extra] });
+    $('tName').textContent = device.name || 'без имени';
+    log(`Выбрано: ${device.name || 'без имени'}`);
+    device.addEventListener('gattserverdisconnected', () => log('Браслет отключился', 'warn'));
+    log('Подключаюсь…');
+    server = await device.gatt.connect();
+    log('Подключено. Читаю сервисы…', 'ok');
+    await explore();
+    stepState(2);
+    for (const it of items){ const p = it.c.properties; if (p.notify || p.indicate) await subscribe(it); }
+    startObservation();
+  }catch(e){ log('Ошибка: ' + (e.message || e), 'err'); }
+}
+async function explore(){
+  items = []; $('services').innerHTML = '';
+  let services = [];
+  try{ services = await server.getPrimaryServices(); }catch(e){ log('Не удалось получить сервисы: ' + e.message, 'err'); }
+  $('tSvc').textContent = services.length;
+  if (!services.length) log('Сервисов не видно. Всё равно отправь отчёт — подберём UUID.', 'warn');
+  for (const s of services){
+    const box = document.createElement('div'); box.className = 'svc';
+    box.innerHTML = `<b>${nameOf(s.uuid) || 'Сервис'}</b><div class="mono" style="color:var(--mute)">${s.uuid}</div>`;
+    $('services').appendChild(box);
+    log(`СЕРВИС ${s.uuid} ${nameOf(s.uuid)}`);
+    let chars = [];
+    try{ chars = await s.getCharacteristics(); }catch(e){ log('  характеристики недоступны: ' + e.message, 'warn'); }
+    for (const c of chars){
+      const p = c.properties, props = ['read','write','writeWithoutResponse','notify','indicate'].filter(k => p[k]);
+      log(`  ХАР-КА ${c.uuid} ${nameOf(c.uuid)} [${props.join(', ')}]`);
+      const it = { svc:s.uuid, c, subscribed:false };
+      const row = document.createElement('div'); row.className = 'ch';
+      row.innerHTML = `<div class="mono">${c.uuid} ${nameOf(c.uuid)}</div><div>${props.map(k=>`<span class="tag">${k}</span>`).join('')}</div>`;
+      const val = document.createElement('div'); val.className = 'mono'; val.style.color = 'var(--mute)'; val.textContent = '—'; row.appendChild(val); it.valEl = val;
+      if (p.write || p.writeWithoutResponse){
+        const r = document.createElement('div'); r.className = 'row';
+        const inp = document.createElement('input'); inp.placeholder = 'hex, напр. AB 00 01';
+        const b = document.createElement('button'); b.className = 'btn ghost sm'; b.textContent = 'Отправить'; b.onclick = () => writeItem(it, inp.value);
+        r.append(inp, b); row.appendChild(r);
+      }
+      box.appendChild(row); items.push(it);
+      if (p.read) await readItem(it);
+    }
+  }
+  log('Сканирование сервисов завершено.', 'ok');
+}
+async function readItem(it){
+  try{ const dv = await it.c.readValue(), ex = interpret(it.c.uuid, dv);
+    it.valEl.textContent = hex(dv) + ' |' + ascii(dv) + '|' + (ex ? ' → ' + ex : '');
+    log(`READ ${short(it.svc)}/${short(it.c.uuid)}: ${hex(dv)} |${ascii(dv)}|${ex ? ' → ' + ex : ''}`);
+  }catch(e){ log(`READ ${short(it.c.uuid)} ошибка: ${e.message}`, 'warn'); }
+}
+async function subscribe(it){
+  if (it.subscribed) return;
+  try{
+    it.c.addEventListener('characteristicvaluechanged', ev => {
+      const dv = ev.target.value, ex = interpret(it.c.uuid, dv); notifCount++; $('tNotif').textContent = notifCount;
+      it.valEl.textContent = hex(dv) + ' |' + ascii(dv) + '|' + (ex ? ' → ' + ex : '');
+      log(`NOTIFY ${short(it.svc)}/${short(it.c.uuid)}: ${hex(dv)} |${ascii(dv)}|${ex ? ' → ' + ex : ''}`, 'ok');
+    });
+    await it.c.startNotifications(); it.subscribed = true;
+    log(`Подписка: ${short(it.svc)}/${short(it.c.uuid)}`);
+  }catch(e){ log(`Подписка на ${short(it.c.uuid)} не удалась: ${e.message}`, 'err'); }
+}
+async function writeItem(it, str){
+  try{ const data = parseHex(str);
+    if (it.c.properties.write) await it.c.writeValueWithResponse(data); else await it.c.writeValueWithoutResponse(data);
+    log(`WRITE ${short(it.svc)}/${short(it.c.uuid)}: ${Array.from(data).map(b=>b.toString(16).padStart(2,'0')).join(' ')}`, 'warn');
+  }catch(e){ log('WRITE ошибка: ' + e.message, 'err'); }
+}
+function startObservation(){
+  const total = 60; let left = total; clearInterval(obsTimer);
+  log('Наблюдение 60 секунд: открой на браслете пульс, подвигай рукой, нажми кнопку.');
+  $('obsText').textContent = `Осталось ${left} с`;
+  $('btnCopy').disabled = false; $('btnShare').disabled = false;
+  obsTimer = setInterval(() => {
+    left--; $('obsBar').style.width = ((total-left)/total*100) + '%';
+    $('obsText').textContent = left > 0 ? `Осталось ${left} с · сообщений: ${notifCount}` : `Готово · сообщений: ${notifCount}`;
+    if (left <= 0){ clearInterval(obsTimer); stepState(3); log('Наблюдение завершено. Отправь отчёт.', 'ok'); }
+  }, 1000);
+}
+function report(){
+  return ['=== ОТЧЁТ СКАНЕРА PULSE ===', 'Устройство: ' + (device ? (device.name || 'без имени') : 'не подключено'),
+    'Браузер: ' + navigator.userAgent, 'Сообщений от браслета: ' + notifCount, ''].concat(logLines).join('\n');
+}
+$('btnCopy').onclick = async () => {
+  const t = report(); $('reportBox').value = t; $('reportBox').hidden = false;
+  try{ await navigator.clipboard.writeText(t); log('Отчёт скопирован — вставь его в чат.', 'ok'); $('btnCopy').textContent = 'Скопировано ✓'; }
+  catch(e){ $('reportBox').focus(); $('reportBox').select(); log('Не получилось скопировать само — выдели текст в поле и скопируй.', 'warn'); }
+};
+if (navigator.share) $('btnShare').hidden = false;
+$('btnShare').onclick = async () => { try{ await navigator.share({ title:'Отчёт сканера Pulse', text: report() }); }catch(e){} };
+$('btnConnect').onclick = async () => { stepState(1); await connect(); };
+$('btnReconnect').onclick = async () => { try{ if (device && device.gatt.connected) device.gatt.disconnect(); }catch(e){} await connect(); };
+if (!navigator.bluetooth){ $('noBt').hidden = false; $('btnConnect').disabled = true; log('Bluetooth в этом браузере недоступен. Открой страницу в Bluefy.', 'err'); }
+else log('Готово. Выполни шаги по порядку.');
+</script>
+</body>
+</html>
