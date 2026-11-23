@@ -147,7 +147,8 @@ function parseHex(str){ const c = str.replace(/0x/gi,'').replace(/[^0-9a-f]/gi,'
 
 // Если браузер отверг какой-то UUID из списка — пробуем меньшим списком, потом без списка
 async function pickDevice(list){
-  const tries = [list, list.filter(x => typeof x === 'number'), [0x180a,0x180f,0x180d,0xfee7,0xfee0,0xfff0,0xffe0,0xff00], []];
+  const str = x => typeof x === 'number' ? '0000' + x.toString(16).padStart(4,'0') + '-0000-1000-8000-00805f9b34fb' : x;
+  const tries = [list.map(str), []];
   for (let i = 0; i < tries.length; i++){
     try{ return await navigator.bluetooth.requestDevice({ acceptAllDevices:true, optionalServices:tries[i] }); }
     catch(e){

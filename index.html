@@ -1308,14 +1308,32 @@ const RAW = { lines:[], packets:0, svc:0 };
 function rawLog(t){ if (RAW.lines.length < 3000) RAW.lines.push(`[${new Date().toTimeString().slice(0,8)}] ${t}`); }
 const hexOf = dv => Array.from(new Uint8Array(dv.buffer, dv.byteOffset, dv.byteLength)).map(b => b.toString(16).padStart(2,'0')).join(' ');
 const shortU = u => { const m = String(u).match(/^0000([0-9a-f]{4})-0000-1000-8000-00805f9b34fb$/i); return m ? m[1].toLowerCase() : String(u).toLowerCase(); };
+const uuidStr = x => typeof x === 'number' ? '0000' + x.toString(16).padStart(4,'0') + '-0000-1000-8000-00805f9b34fb' : x;
 async function pickDev(){
-  const tries = [BT_SERVICES, BT_SERVICES.filter(x => typeof x === 'number'), [0x180a,0x180f,0x180d,0xfee7,0xfee0,0xfff0,0xffe0,0xff00]];
+  const tries = [BT_SERVICES.map(uuidStr), []];
   let last;
   for (const t of tries){
     try{ return await navigator.bluetooth.requestDevice({ acceptAllDevices:true, optionalServices:t }); }
-    catch(e){ last = e; rawLog(`requestDevice: ${e.name} ${e.message}`); if (e.name === 'NotFoundError') throw e; }
+    catch(e){ last = e; rawLog(`requestDevice: ${e.name} ${e.message}`); if (e.name === 'NotFoundError' && /cancel/i.test(e.message || '')) throw e; }
   }
   throw last;
+}
+// Шаги: стандартный сервис FEE7 / FEA1 (байт флагов + шаги uint24 little-endian)
+function onSteps(dv){
+  if (dv.byteLength < 4) return;
+  const steps = dv.getUint8(1) | (dv.getUint8(2) << 8) | (dv.getUint8(3) << 16);
+  const r = dayRec(), now = new Date(), bin = Math.floor((now.getHours()*60 + now.getMinutes())/10)*10;
+  if (BT.lastSteps != null && steps > BT.lastSteps && steps - BT.lastSteps < 20000){
+    r.samples = r.samples || {}; const a = r.samples.steps = r.samples.steps || [];
+    const last = a[a.length-1]; if (last && last[0] === bin) last[1] += steps - BT.lastSteps; else a.push([bin, steps - BT.lastSteps]);
+  }
+  BT.lastSteps = steps;
+  if (r.steps !== steps){ r.steps = steps; if (Date.now() - (BT.stepSave||0) > 30000){ BT.stepSave = Date.now(); saveDay(); } render(); }
+}
+// Пакеты b5 0b … с канала F008 приходят при нажатии кнопки браслета
+function onVendor(su, dv){
+  const b = new Uint8Array(dv.buffer, dv.byteOffset, dv.byteLength);
+  if (b[0] === 0xb5 && b[1] === 0x0b){ BT.btnN = (BT.btnN||0) + 1; toast('Нажата кнопка браслета'); }
 }
 async function discoverAll(g){
   let svcs = [];
@@ -1327,10 +1345,14 @@ async function discoverAll(g){
     for (const c of chars){
       const pr = c.properties, su = shortU(c.uuid);
       rawLog(`  CH ${c.uuid} [${['read','write','writeWithoutResponse','notify','indicate'].filter(k => pr[k]).join(',')}]`);
-      if (pr.read){ try{ rawLog(`  READ ${su}: ${hexOf(await c.readValue())}`); }catch(e){} }
+      if (pr.read){ try{ const v = await c.readValue(); rawLog(`  READ ${su}: ${hexOf(v)}`);
+        if (su === 'fea1') onSteps(v);
+        if (su === 'fec9' && v.byteLength === 6) dev().mac = hexOf(v).replace(/ /g, ':').toUpperCase();
+      }catch(e){} }
+      if (su === 'fea1' && pr.read){ clearInterval(BT.stepPoll); BT.stepPoll = setInterval(async () => { if (!BT.connected) return clearInterval(BT.stepPoll); try{ onSteps(await c.readValue()); }catch(e){} }, 60000); }
       if ((pr.notify || pr.indicate) && su !== '2a37' && su !== '2a19'){
         try{
-          c.addEventListener('characteristicvaluechanged', e => { RAW.packets++; rawLog(`NOTIFY ${shortU(sv.uuid)}/${su}: ${hexOf(e.target.value)}`); if (RAW.packets % 5 === 1) renderConn(); });
+          c.addEventListener('characteristicvaluechanged', e => { const v = e.target.value; RAW.packets++; rawLog(`NOTIFY ${shortU(sv.uuid)}/${su}: ${hexOf(v)}`); if (su === 'fea1') onSteps(v); else onVendor(su, v); if (RAW.packets % 5 === 1) renderConn(); });
           await c.startNotifications();
         }catch(e){ rawLog(`  подписка ${su}: ${e.message}`); }
       }
@@ -1399,7 +1421,7 @@ function renderConn(){
   }
   const st = BT.connected ? ['var(--g)', 'Подключён' + (BT.dev && BT.dev.name ? ' · ' + esc(BT.dev.name) : '')] : BT.busy ? ['var(--y)', 'Подключаюсь…'] : ['var(--dim)', 'Не подключён'];
   const txt = BT.connected
-    ? `Pulse принимает всё, что передаёт браслет: сервисов ${RAW.svc}, пакетов ${RAW.packets}. Поделай на браслете замер пульса, затем нажми «Отчёт для Claude» и пришли его в чат — после разбора замеры за каждые 10 минут, сон и остальное будут загружаться сами при входе.`
+    ? `Шаги приходят с браслета сами${BT.lastSteps != null ? ' (сейчас ' + BT.lastSteps.toLocaleString('ru-RU') + ')' : ''}, нажатия кнопки тоже ловятся. Остальное Pulse пока записывает: сервисов ${RAW.svc}, пакетов ${RAW.packets}. Оставь браслет подключённым на 10–15 минут, сделай на нём замеры пульса, кислорода и давления, потом нажми «Отчёт для Claude».`
     : 'Перед подключением закрой G Band — браслет работает только с одним приложением. Дальше Pulse будет подключаться сам при открытии.';
   el.innerHTML = `<div style="display:flex;align-items:center;gap:8px;font-weight:600"><span class="dot" style="background:${st[0]};box-shadow:0 0 8px ${st[0]}"></span>${st[1]}</div>
     <div class="sub" style="margin-top:6px">${txt}</div>
