@@ -1391,7 +1391,8 @@ function vpOn(dv){
       break;
     case 0xA0:
       if (b.length >= 7){
-        const pct = b[5] !== 1 ? b[6] : b[4]*25;
+        // браслет присылает процент в b6 (у этой модели и в b4); старые модели — уровень 0–4 в b4
+        const pct = b[6] > 0 && b[6] <= 100 ? b[6] : b[4] <= 4 ? b[4]*25 : b[4];
         if (pct >= 0 && pct <= 100){ Object.assign(dev(), { battery:pct, batteryAt:Date.now() }); saveS(); render(); }
       }
       break;
