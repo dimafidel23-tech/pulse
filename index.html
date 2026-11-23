@@ -362,6 +362,7 @@ nav svg{width:22px;height:22px}
       <div id="mChart"></div>
       <div class="tip" id="mTip"></div>
       <div class="stats3" id="mStats"></div>
+      <div id="mMeasure"></div>
     </div>
     <div class="card">
       <h3>Добавить замер</h3>
@@ -1131,6 +1132,7 @@ function renderMetric(){
   const zt = zoneText(zk);
   $('mZones').innerHTML = ['g','y','r'].map(x => `<div class="zrow"><i style="background:${ZCOL[x]}"></i>${ZTXT[x]}<span>${zt[x]} ${M.unit}</span></div>`).join('');
   $('mNote').textContent = ZNOTE[zk] || '';
+  renderMeasure();
 }
 $('mPrev').onclick = () => { mOffset++; renderMetric(); };
 $('mNext').onclick = () => { mOffset = Math.max(0, mOffset-1); renderMetric(); };
@@ -1330,10 +1332,120 @@ function onSteps(dv){
   BT.lastSteps = steps;
   if (r.steps !== steps){ r.steps = steps; if (Date.now() - (BT.stepSave||0) > 30000){ BT.stepSave = Date.now(); saveDay(); } render(); }
 }
-// Пакеты b5 0b … с канала F008 приходят при нажатии кнопки браслета
-function onVendor(su, dv){
+// ---- Протокол браслета (Veepoo): команды в F0080003, ответы из F0080002 ----
+const VP = { svc:'f0080001-0451-4000-b000-000000000000', wr:'f0080003-0451-4000-b000-000000000000', nt:'f0080002-0451-4000-b000-000000000000',
+  ch:null, ready:false, q:Promise.resolve(), meas:null };
+function vpSend(arr){
+  if (!VP.ch) return Promise.resolve();
+  const data = new Uint8Array(arr.map(x => x & 255));
+  rawLog('SEND ' + Array.from(data).map(x => x.toString(16).padStart(2,'0')).join(' '));
+  VP.q = VP.q.then(() => VP.ch.properties.write ? VP.ch.writeValueWithResponse(data) : VP.ch.writeValueWithoutResponse(data)).catch(e => rawLog('write: ' + e.message));
+  return VP.q;
+}
+const pad20 = arr => { const b = new Array(20).fill(0); arr.forEach((v,i) => b[i] = v); return b; };
+// Подтверждение пароля (по умолчанию 0000) + установка времени браслета
+function vpLogin(){
+  const d = new Date(), y = d.getFullYear();
+  return vpSend(pad20([0xA1, 0, 0, 0, (y >> 8) & 255, y & 255, d.getMonth()+1, d.getDate(), d.getHours(), d.getMinutes(), d.getSeconds(), 1, 1, Math.round(-d.getTimezoneOffset()/15) & 255]));
+}
+const vpBattery = () => vpSend([0xA0, 0]);
+const MEAS = {
+  hr:   { name:'Пульс',    start:() => vpSend(pad20([0xD0, 1])), stop:() => vpSend([0xD0, 0]),    max:40000 },
+  spo2: { name:'Кислород', start:() => vpSend([0x80, 1, 2]),     stop:() => vpSend([0x80, 2, 2]), max:60000 },
+  bp:   { name:'Давление', start:() => vpSend([0x90, 1, 0]),     stop:() => vpSend([0x90, 0, 0]), max:90000 }
+};
+function measStart(k){
+  if (!VP.ready){ toast('Сначала подключи браслет'); return; }
+  if (VP.meas) measStop(false);
+  VP.meas = { k, t0:Date.now(), text:'Замеряю… держи руку неподвижно', val:null };
+  MEAS[k].start();
+  VP.meas.timer = setTimeout(() => measStop(true), MEAS[k].max);
+  renderMeasure();
+}
+function measStop(save){
+  const m = VP.meas; if (!m) return;
+  clearTimeout(m.timer); MEAS[m.k].stop(); VP.meas = null;
+  if (save && m.val != null){
+    const now = new Date(), min = now.getHours()*60 + now.getMinutes(), r = dayRec();
+    r.samples = r.samples || {}; const arr = r.samples[m.k] = r.samples[m.k] || [];
+    arr.push(m.k === 'bp' ? [min, m.val[0], m.val[1]] : [min, m.val]); arr.sort((x,y) => x[0]-y[0]);
+    saveDay(); toast(`${MEAS[m.k].name}: ${m.k === 'bp' ? m.val.join('/') : m.val} — сохранено`);
+  } else if (save) toast('Замер не получился — проверь, что браслет плотно на руке');
+  render();
+}
+function measUpdate(k, text, val, done){
+  const m = VP.meas; if (!m || m.k !== k) return;
+  m.text = text; if (val != null) m.val = val;
+  if (done) measStop(true); else renderMeasure();
+}
+function vpOn(dv){
   const b = new Uint8Array(dv.buffer, dv.byteOffset, dv.byteLength);
-  if (b[0] === 0xb5 && b[1] === 0x0b){ BT.btnN = (BT.btnN||0) + 1; toast('Нажата кнопка браслета'); }
+  switch (b[0]){
+    case 0xA1:
+      if (b.length >= 4){
+        VP.ready = b[3] === 1 || b[3] === 6;
+        rawLog('Пароль: ' + (VP.ready ? 'принят' : 'не принят'));
+        if (VP.ready) vpBattery(); else toast('Браслет не принял пароль');
+        render();
+      }
+      break;
+    case 0xA0:
+      if (b.length >= 7){
+        const pct = b[5] !== 1 ? b[6] : b[4]*25;
+        if (pct >= 0 && pct <= 100){ Object.assign(dev(), { battery:pct, batteryAt:Date.now() }); saveS(); render(); }
+      }
+      break;
+    case 0xD0: {
+      const hr = b[1], st = b.length >= 6 ? b[5] : 0;
+      if (st !== 0 && st !== 2 && st !== 3) measUpdate('hr', 'Браслет занят другим замером');
+      else if (hr === 1 || hr === 2) measUpdate('hr', 'Надень браслет плотнее');
+      else if (hr >= 30 && hr <= 210){
+        BT.hr = hr; $('dvScreen').textContent = hr;
+        const m = VP.meas;
+        measUpdate('hr', `${hr} уд/мин`, hr, !!(m && Date.now() - m.t0 > 20000));
+      }
+      break; }
+    case 0x80: {
+      if (b.length < 5) break;
+      const dstate = b[2], val = b[3], checking = b[4] === 1 || b[4] === 2;
+      if (dstate === 12 || val === 1) measUpdate('spo2', 'Надень браслет плотнее');
+      else if (checking) measUpdate('spo2', `Замеряю… ${b[5] || 0}%`);
+      else if (val >= 70 && val <= 100) measUpdate('spo2', `${val}%`, val, true);
+      break; }
+    case 0x90: {
+      if (b.length < 6) break;
+      const hi = b[1], lo = b[2], prog = b[3], st = b[4];
+      if (st === 252) measUpdate('bp', 'Надень браслет плотнее');
+      else if (st === 253) measUpdate('bp', 'Браслет заряжается');
+      else if (st === 254) measUpdate('bp', 'Мало заряда');
+      else if ([1,2,4,5,255].includes(st)) measUpdate('bp', 'Браслет занят другим замером');
+      else if (hi > 0 && lo > 0) measUpdate('bp', `${hi}/${lo}`, [hi, lo], prog >= 100 || prog === 0);
+      else measUpdate('bp', `Замеряю… ${prog}%`);
+      break; }
+    case 0xB5:
+      toast('Браслет ищет телефон');
+      break;
+  }
+}
+function onVendor(su, dv){ if (su === VP.nt) vpOn(dv); }
+function vpFind(){
+  if (!VP.ready){ toast('Сначала подключи браслет'); return; }
+  vpSend([0xAE, 1]); toast('Браслет вибрирует');
+  setTimeout(() => vpSend([0xAE, 0]), 6000);
+}
+function measureHTML(only){
+  if (!VP.ready) return '';
+  const m = VP.meas, keys = only ? [only] : ['hr','spo2','bp'];
+  if (m && keys.includes(m.k)) return `<div class="card" style="background:var(--card2);margin:12px 0 0;text-align:center"><div class="kick">${MEAS[m.k].name}</div><div class="big">${esc(m.text)}</div><button class="btn ghost" data-meas-stop style="margin-top:10px">Остановить</button></div>`;
+  return `<div class="btns">${keys.map(k => `<button class="btn ${only ? '' : 'ghost'}" data-meas="${k}">${only ? 'Замерить сейчас' : MEAS[k].name}</button>`).join('')}</div>`;
+}
+function bindMeasure(root){
+  qa('[data-meas]', root).forEach(x => x.onclick = () => measStart(x.dataset.meas));
+  qa('[data-meas-stop]', root).forEach(x => x.onclick = () => measStop(true));
+}
+function renderMeasure(){
+  if ($('dvMeas')){ $('dvMeas').innerHTML = measureHTML(); bindMeasure($('dvMeas')); }
+  if ($('mMeasure')){ const k = { hr:'hr', spo2:'spo2', bp:'bp' }[mKey]; $('mMeasure').innerHTML = (k && view() === 'metric') ? measureHTML(k) : ''; bindMeasure($('mMeasure')); }
 }
 async function discoverAll(g){
   let svcs = [];
@@ -1344,6 +1456,7 @@ async function discoverAll(g){
     let chars = []; try{ chars = await sv.getCharacteristics(); }catch(e){ rawLog('  характеристики: ' + e.message); }
     for (const c of chars){
       const pr = c.properties, su = shortU(c.uuid);
+      if (su === VP.wr) VP.ch = c;
       rawLog(`  CH ${c.uuid} [${['read','write','writeWithoutResponse','notify','indicate'].filter(k => pr[k]).join(',')}]`);
       if (pr.read){ try{ const v = await c.readValue(); rawLog(`  READ ${su}: ${hexOf(v)}`);
         if (su === 'fea1') onSteps(v);
@@ -1360,7 +1473,7 @@ async function discoverAll(g){
   }
 }
 function rawReport(){ return ['=== ОТЧЁТ PULSE ===', 'Устройство: ' + (BT.dev ? (BT.dev.name || 'без имени') : '—'), 'Браузер: ' + navigator.userAgent, `Сервисов: ${RAW.svc} · пакетов: ${RAW.packets}`, ''].concat(RAW.lines).join('\n'); }
-function onBtDisc(){ BT.connected = false; BT.hr = null; render(); }
+function onBtDisc(){ BT.connected = false; BT.hr = null; VP.ready = false; if (VP.meas){ clearTimeout(VP.meas.timer); VP.meas = null; } render(); }
 function onHr(v){
   let bpm; try{ const f = v.getUint8(0); bpm = (f & 1) ? v.getUint16(1, true) : v.getUint8(1); }catch(e){ return; }
   if (!bpm || bpm < 30 || bpm > 230) return;
@@ -1398,7 +1511,9 @@ async function btConnect(pick){
       const ch = await (await g.getPrimaryService('heart_rate')).getCharacteristic('heart_rate_measurement');
       ch.oncharacteristicvaluechanged = e => onHr(e.target.value); await ch.startNotifications(); BT.hasHr = true;
     }catch(e){ BT.hasHr = false; }
+    VP.ch = null; VP.ready = false;
     await discoverAll(g);
+    if (VP.ch){ await vpLogin(); clearInterval(BT.batPoll); BT.batPoll = setInterval(() => { if (BT.connected && VP.ready) vpBattery(); }, 10*60000); }
     toast('Браслет подключён');
   }catch(e){
     BT.connected = false;
@@ -1421,14 +1536,17 @@ function renderConn(){
   }
   const st = BT.connected ? ['var(--g)', 'Подключён' + (BT.dev && BT.dev.name ? ' · ' + esc(BT.dev.name) : '')] : BT.busy ? ['var(--y)', 'Подключаюсь…'] : ['var(--dim)', 'Не подключён'];
   const txt = BT.connected
-    ? `Шаги приходят с браслета сами${BT.lastSteps != null ? ' (сейчас ' + BT.lastSteps.toLocaleString('ru-RU') + ')' : ''}, нажатия кнопки тоже ловятся. Остальное Pulse пока записывает: сервисов ${RAW.svc}, пакетов ${RAW.packets}. Оставь браслет подключённым на 10–15 минут, сделай на нём замеры пульса, кислорода и давления, потом нажми «Отчёт для Claude».`
+    ? (VP.ready ? `Связь установлена. Заряд, шаги и время синхронизируются сами. Ниже можно запустить замер — результат сохранится в графики.` : `Подключаюсь к браслету… Если долго висит — закрой G Band и подключись заново. Сервисов ${RAW.svc}, пакетов ${RAW.packets}.`)
     : 'Перед подключением закрой G Band — браслет работает только с одним приложением. Дальше Pulse будет подключаться сам при открытии.';
   el.innerHTML = `<div style="display:flex;align-items:center;gap:8px;font-weight:600"><span class="dot" style="background:${st[0]};box-shadow:0 0 8px ${st[0]}"></span>${st[1]}</div>
     <div class="sub" style="margin-top:6px">${txt}</div>
     <div class="btns">${BT.connected ? '<button class="btn ghost" id="btOff">Отключить</button>' : `<button class="btn" id="btOn" ${BT.busy?'disabled':''}>Подключить браслет</button>`}${RAW.lines.length ? '<button class="btn" id="btRep">Отчёт для Claude</button>' : ''}</div>
+    ${VP.ready ? '<div class="kick" style="margin-top:14px">Замер сейчас</div><div id="dvMeas"></div><button class="btn ghost" id="btFind" style="margin-top:8px">Найти браслет (вибрация)</button>' : ''}
     <textarea id="btRepBox" readonly hidden style="height:120px;font:11px ui-monospace,monospace;margin-top:10px" aria-label="Отчёт"></textarea>`;
   if ($('btOn')) $('btOn').onclick = () => btConnect(true);
   if ($('btOff')) $('btOff').onclick = () => { try{ BT.dev.gatt.disconnect(); }catch(e){} onBtDisc(); };
+  if ($('btFind')) $('btFind').onclick = vpFind;
+  renderMeasure();
   if ($('btRep')) $('btRep').onclick = async () => {
     const t = rawReport();
     try{ await navigator.clipboard.writeText(t); toast('Отчёт скопирован — вставь в чат'); }
