@@ -1312,10 +1312,16 @@ const hexOf = dv => Array.from(new Uint8Array(dv.buffer, dv.byteOffset, dv.byteL
 const shortU = u => { const m = String(u).match(/^0000([0-9a-f]{4})-0000-1000-8000-00805f9b34fb$/i); return m ? m[1].toLowerCase() : String(u).toLowerCase(); };
 const uuidStr = x => typeof x === 'number' ? '0000' + x.toString(16).padStart(4,'0') + '-0000-1000-8000-00805f9b34fb' : x;
 async function pickDev(){
-  const tries = [BT_SERVICES.map(uuidStr), []];
+  // В списке показываем только браслет (имя в эфире — VITRO); если не найдётся — обычный список
+  const svc = BT_SERVICES.map(uuidStr), names = [...new Set(['VITRO', dev().btName].filter(Boolean))];
+  const tries = [
+    { filters: names.map(n => ({ namePrefix: n })), optionalServices: svc },
+    { acceptAllDevices: true, optionalServices: svc },
+    { acceptAllDevices: true, optionalServices: [] }
+  ];
   let last;
   for (const t of tries){
-    try{ return await navigator.bluetooth.requestDevice({ acceptAllDevices:true, optionalServices:t }); }
+    try{ return await navigator.bluetooth.requestDevice(t); }
     catch(e){ last = e; rawLog(`requestDevice: ${e.name} ${e.message}`); if (e.name === 'NotFoundError' && /cancel/i.test(e.message || '')) throw e; }
   }
   throw last;
@@ -1527,7 +1533,19 @@ async function btConnect(pick){
 // при открытии — переподключиться к уже выбранному браслету, если браузер это разрешает
 async function btAuto(){
   if (!HAS_BT || BT.connected || BT.busy || !navigator.bluetooth.getDevices) return;
-  try{ const ds = await navigator.bluetooth.getDevices(); const d = ds.find(x => x.id === dev().btId) || ds[0]; if (d){ BT.dev = d; await btConnect(false); } }catch(e){}
+  // Браузер помнит разрешённый браслет — подключаемся сами, без списка
+  try{
+    const ds = await navigator.bluetooth.getDevices();
+    const d = ds.find(x => x.id === dev().btId) || ds.find(x => /^VITRO/i.test(x.name || '')) || ds[0];
+    if (!d) return;
+    BT.dev = d;
+    if (d.watchAdvertisements && !d.gatt.connected){
+      // ждём, пока браслет окажется рядом, и тогда подключаемся
+      d.onadvertisementreceived = () => { d.onadvertisementreceived = null; try{ d.unwatchAdvertisements && d.unwatchAdvertisements(); }catch(e){} if (!BT.connected) btConnect(false); };
+      try{ await d.watchAdvertisements(); }catch(e){ await btConnect(false); return; }
+      setTimeout(() => { if (!BT.connected && !BT.busy) btConnect(false); }, 4000);
+    } else await btConnect(false);
+  }catch(e){ rawLog('Автоподключение: ' + (e.message || e)); }
 }
 function renderConn(){
   const el = $('dvConn');
@@ -1540,7 +1558,7 @@ function renderConn(){
   const st = BT.connected ? ['var(--g)', 'Подключён' + (BT.dev && BT.dev.name ? ' · ' + esc(BT.dev.name) : '')] : BT.busy ? ['var(--y)', 'Подключаюсь…'] : ['var(--dim)', 'Не подключён'];
   const txt = BT.connected
     ? (VP.ready ? `Связь установлена. Заряд, шаги и время синхронизируются сами. Ниже можно запустить замер — результат сохранится в графики.` : `Подключаюсь к браслету… Если долго висит — закрой G Band и подключись заново. Сервисов ${RAW.svc}, пакетов ${RAW.packets}.`)
-    : 'Перед подключением закрой G Band — браслет работает только с одним приложением. Дальше Pulse будет подключаться сам при открытии.';
+    : 'Закрой G Band — браслет работает только с одним приложением. В окне выбора нажми VITRO и оставь включённым «Разрешить фоновые соединения» — тогда Pulse будет подключаться сам при открытии.';
   el.innerHTML = `<div style="display:flex;align-items:center;gap:8px;font-weight:600"><span class="dot" style="background:${st[0]};box-shadow:0 0 8px ${st[0]}"></span>${st[1]}</div>
     <div class="sub" style="margin-top:6px">${txt}</div>
     <div class="btns">${BT.connected ? '<button class="btn ghost" id="btOff">Отключить</button>' : `<button class="btn" id="btOn" ${BT.busy?'disabled':''}>Подключить браслет</button>`}${RAW.lines.length ? '<button class="btn" id="btRep">Отчёт для Claude</button>' : ''}</div>
