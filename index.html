@@ -1298,7 +1298,46 @@ const SENSORS = [
 // ---- Bluetooth (работает в браузере Bluefy; внутри Claude недоступен) ----
 const HAS_BT = !!navigator.bluetooth;
 const BT = { dev:null, connected:false, busy:false, hr:null, hasHr:false, bin:null, sum:0, n:0, lastSave:0, liveSum:0, liveN:0 };
-const BT_SERVICES = ['battery_service','heart_rate','device_information'];
+const BT_SERVICES = [0x1800,0x1801,0x180a,0x180f,0x180d,0x1805,0x1802,0x1803,0x1804,0x1810,0x1809,0x1822,0x181c,
+  0x18d0,0x0af0,0x0af6,0x2760,0x3802,0x6006,0x7905,0x190e,0xa800,0xae00,0xae30,0xae3a,0xd0ff,0xd618,0xfe59,0xfeba,0xfec7,0xfec8,0xfec9,0xfed0,
+  0xfee0,0xfee1,0xfee7,0xfee8,0xfee9,0xfeea,0xfef5,0xff00,0xff01,0xff10,0xff12,0xff20,0xffa0,0xffb0,0xffc0,0xffd0,0xffe0,0xffe5,0xfff0,0xfff5,0xfd00,0xfd01,
+  '6e400001-b5a3-f393-e0a9-e50e24dcca9e','be940000-7333-be46-b7ae-689e71722bd5','000001ff-3c17-d293-8e48-14fe2e4da212','0000d0ff-3c17-d293-8e48-14fe2e4da212',
+  'de5bf728-d711-4e47-af26-65e3012a5dc7','00010203-0405-0607-0809-0a0b0c0d1910','00002760-08c2-11e1-9073-0e8ac72e1001','5833ff01-9b8b-5191-6142-22a4536ef123','c3e6fea0-e966-1000-8000-be99c223df6a'];
+// Журнал всего, что передаёт браслет: по нему Claude разберёт формат, после чего данные будут разбираться автоматически
+const RAW = { lines:[], packets:0, svc:0 };
+function rawLog(t){ if (RAW.lines.length < 3000) RAW.lines.push(`[${new Date().toTimeString().slice(0,8)}] ${t}`); }
+const hexOf = dv => Array.from(new Uint8Array(dv.buffer, dv.byteOffset, dv.byteLength)).map(b => b.toString(16).padStart(2,'0')).join(' ');
+const shortU = u => { const m = String(u).match(/^0000([0-9a-f]{4})-0000-1000-8000-00805f9b34fb$/i); return m ? m[1].toLowerCase() : String(u).toLowerCase(); };
+async function pickDev(){
+  const tries = [BT_SERVICES, BT_SERVICES.filter(x => typeof x === 'number'), [0x180a,0x180f,0x180d,0xfee7,0xfee0,0xfff0,0xffe0,0xff00]];
+  let last;
+  for (const t of tries){
+    try{ return await navigator.bluetooth.requestDevice({ acceptAllDevices:true, optionalServices:t }); }
+    catch(e){ last = e; rawLog(`requestDevice: ${e.name} ${e.message}`); if (e.name === 'NotFoundError') throw e; }
+  }
+  throw last;
+}
+async function discoverAll(g){
+  let svcs = [];
+  try{ svcs = await g.getPrimaryServices(); }catch(e){ rawLog('Сервисы недоступны: ' + e.message); }
+  RAW.svc = svcs.length; rawLog(`СЕРВИСОВ: ${svcs.length}`);
+  for (const sv of svcs){
+    rawLog('SVC ' + sv.uuid);
+    let chars = []; try{ chars = await sv.getCharacteristics(); }catch(e){ rawLog('  характеристики: ' + e.message); }
+    for (const c of chars){
+      const pr = c.properties, su = shortU(c.uuid);
+      rawLog(`  CH ${c.uuid} [${['read','write','writeWithoutResponse','notify','indicate'].filter(k => pr[k]).join(',')}]`);
+      if (pr.read){ try{ rawLog(`  READ ${su}: ${hexOf(await c.readValue())}`); }catch(e){} }
+      if ((pr.notify || pr.indicate) && su !== '2a37' && su !== '2a19'){
+        try{
+          c.addEventListener('characteristicvaluechanged', e => { RAW.packets++; rawLog(`NOTIFY ${shortU(sv.uuid)}/${su}: ${hexOf(e.target.value)}`); if (RAW.packets % 5 === 1) renderConn(); });
+          await c.startNotifications();
+        }catch(e){ rawLog(`  подписка ${su}: ${e.message}`); }
+      }
+    }
+  }
+}
+function rawReport(){ return ['=== ОТЧЁТ PULSE ===', 'Устройство: ' + (BT.dev ? (BT.dev.name || 'без имени') : '—'), 'Браузер: ' + navigator.userAgent, `Сервисов: ${RAW.svc} · пакетов: ${RAW.packets}`, ''].concat(RAW.lines).join('\n'); }
 function onBtDisc(){ BT.connected = false; BT.hr = null; render(); }
 function onHr(v){
   let bpm; try{ const f = v.getUint8(0); bpm = (f & 1) ? v.getUint16(1, true) : v.getUint8(1); }catch(e){ return; }
@@ -1321,7 +1360,8 @@ async function btConnect(pick){
   BT.busy = true; renderConn();
   try{
     let d = BT.dev;
-    if (pick || !d) d = await navigator.bluetooth.requestDevice({ acceptAllDevices:true, optionalServices:BT_SERVICES });
+    if (pick || !d) d = await pickDev();
+    rawLog('Подключаюсь к ' + (d.name || 'без имени'));
     BT.dev = d; d.ongattserverdisconnected = onBtDisc;
     const g = await d.gatt.connect();
     BT.connected = true;
@@ -1336,6 +1376,7 @@ async function btConnect(pick){
       const ch = await (await g.getPrimaryService('heart_rate')).getCharacteristic('heart_rate_measurement');
       ch.oncharacteristicvaluechanged = e => onHr(e.target.value); await ch.startNotifications(); BT.hasHr = true;
     }catch(e){ BT.hasHr = false; }
+    await discoverAll(g);
     toast('Браслет подключён');
   }catch(e){
     BT.connected = false;
@@ -1352,21 +1393,26 @@ function renderConn(){
   const el = $('dvConn');
   if (!HAS_BT){
     el.innerHTML = IN_CLAUDE
-      ? `<div style="display:flex;align-items:center;gap:8px;font-weight:600"><span class="dot" style="background:var(--y);box-shadow:0 0 8px var(--y)"></span>Синхронизация вручную</div><div class="sub" style="margin-top:6px">Внутри приложения Claude телефон не даёт доступ к Bluetooth. Для автоподключения открой браузерную версию Pulse в Bluefy.</div>`
+      ? `<div style="display:flex;align-items:center;gap:8px;font-weight:600"><span class="dot" style="background:var(--y);box-shadow:0 0 8px var(--y)"></span>Синхронизация вручную</div><div class="sub" style="margin-top:6px">Внутри приложения Claude телефон не даёт доступ к Bluetooth. Для автоподключения открой Pulse в Bluefy: dimafidel23-tech.github.io/pulse</div>`
       : `<div style="display:flex;align-items:center;gap:8px;font-weight:600"><span class="dot" style="background:var(--dim)"></span>Bluetooth недоступен</div><div class="sub" style="margin-top:6px">На iPhone открой Pulse в бесплатном браузере <b>Bluefy</b> — там браслет подключается.</div>`;
     return;
   }
   const st = BT.connected ? ['var(--g)', 'Подключён' + (BT.dev && BT.dev.name ? ' · ' + esc(BT.dev.name) : '')] : BT.busy ? ['var(--y)', 'Подключаюсь…'] : ['var(--dim)', 'Не подключён'];
   const txt = BT.connected
-    ? (BT.hasHr ? 'Живой пульс идёт с браслета и сохраняется в график.' : 'Связь есть. Полную загрузку данных Pulse научится делать после разбора отчёта сканера.')
-    : 'Перед подключением закрой G Band — браслет работает только с одним приложением.';
+    ? `Pulse принимает всё, что передаёт браслет: сервисов ${RAW.svc}, пакетов ${RAW.packets}. Поделай на браслете замер пульса, затем нажми «Отчёт для Claude» и пришли его в чат — после разбора замеры за каждые 10 минут, сон и остальное будут загружаться сами при входе.`
+    : 'Перед подключением закрой G Band — браслет работает только с одним приложением. Дальше Pulse будет подключаться сам при открытии.';
   el.innerHTML = `<div style="display:flex;align-items:center;gap:8px;font-weight:600"><span class="dot" style="background:${st[0]};box-shadow:0 0 8px ${st[0]}"></span>${st[1]}</div>
     <div class="sub" style="margin-top:6px">${txt}</div>
-    <div class="btns">${BT.connected ? '<button class="btn ghost" id="btOff">Отключить</button>' : `<button class="btn" id="btOn" ${BT.busy?'disabled':''}>Подключить браслет</button>`}${IN_CLAUDE ? '' : '<a class="btn ghost" href="scanner.html" style="text-decoration:none">Сканер</a>'}</div>`;
+    <div class="btns">${BT.connected ? '<button class="btn ghost" id="btOff">Отключить</button>' : `<button class="btn" id="btOn" ${BT.busy?'disabled':''}>Подключить браслет</button>`}${RAW.lines.length ? '<button class="btn" id="btRep">Отчёт для Claude</button>' : ''}</div>
+    <textarea id="btRepBox" readonly hidden style="height:120px;font:11px ui-monospace,monospace;margin-top:10px" aria-label="Отчёт"></textarea>`;
   if ($('btOn')) $('btOn').onclick = () => btConnect(true);
   if ($('btOff')) $('btOff').onclick = () => { try{ BT.dev.gatt.disconnect(); }catch(e){} onBtDisc(); };
+  if ($('btRep')) $('btRep').onclick = async () => {
+    const t = rawReport();
+    try{ await navigator.clipboard.writeText(t); toast('Отчёт скопирован — вставь в чат'); }
+    catch(e){ const b = $('btRepBox'); b.value = t; b.hidden = false; b.focus(); b.select(); toast('Выдели текст и скопируй'); }
+  };
 }
-
 function renderDevice(){
   const b = batteryNow(), D = dev(), name = devName();
   $('devName').textContent = name; $('devBat').textContent = b == null ? '' : b + '%';

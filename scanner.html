@@ -102,14 +102,12 @@ a{color:var(--b)}
 const $ = id => document.getElementById(id);
 // Сервисы, которые встречаются у недорогих браслетов. Web Bluetooth показывает только перечисленные.
 const COMMON = [
-  'generic_access','generic_attribute','device_information','battery_service','heart_rate','current_time','immediate_alert','link_loss','tx_power',
-  'running_speed_and_cadence','user_data','body_composition','health_thermometer','blood_pressure','pulse_oximeter','environmental_sensing',
+  0x1800,0x1801,0x180a,0x180f,0x180d,0x1805,0x1802,0x1803,0x1804,0x1814,0x181c,0x181b,0x1809,0x1810,0x1822,0x181a,
   0x1530,0x18d0,0x0af0,0x0af6,0x2760,0x3802,0x6006,0x7905,0x190e,0xa800,0xae00,0xae30,0xae3a,0xd0ff,0xd618,
   0xfe59,0xfeba,0xfec7,0xfec8,0xfec9,0xfed0,0xfee0,0xfee1,0xfee7,0xfee8,0xfee9,0xfeea,0xfef5,
   0xff00,0xff01,0xff10,0xff12,0xff20,0xffa0,0xffb0,0xffc0,0xffd0,0xffe0,0xffe5,0xfff0,0xfff5,0xfd00,0xfd01,
   '6e400001-b5a3-f393-e0a9-e50e24dcca9e',
   'be940000-7333-be46-b7ae-689e71722bd5',
-  'f000ffc0-0451-4000-b000-000000000000',
   '000001ff-3c17-d293-8e48-14fe2e4da212',
   '0000d0ff-3c17-d293-8e48-14fe2e4da212',
   'de5bf728-d711-4e47-af26-65e3012a5dc7',
@@ -147,12 +145,25 @@ function interpret(uuid, dv){
 function normUuid(s){ s = s.trim().toLowerCase().replace(/^0x/,''); if (/^[0-9a-f]{4}$/.test(s) || /^[0-9a-f]{8}$/.test(s)) return parseInt(s, 16); return s; }
 function parseHex(str){ const c = str.replace(/0x/gi,'').replace(/[^0-9a-f]/gi,''); if (!c || c.length % 2) throw new Error('Нужны пары hex-символов: AB 01 FF'); return new Uint8Array(c.match(/../g).map(h => parseInt(h,16))); }
 
+// Если браузер отверг какой-то UUID из списка — пробуем меньшим списком, потом без списка
+async function pickDevice(list){
+  const tries = [list, list.filter(x => typeof x === 'number'), [0x180a,0x180f,0x180d,0xfee7,0xfee0,0xfff0,0xffe0,0xff00], []];
+  for (let i = 0; i < tries.length; i++){
+    try{ return await navigator.bluetooth.requestDevice({ acceptAllDevices:true, optionalServices:tries[i] }); }
+    catch(e){
+      log(`Попытка ${i+1}: ${e.name || 'Error'} — ${e.message || e}`, 'warn');
+      if (e.name === 'NotFoundError' && /cancel/i.test(e.message || '')) throw e;  // пользователь закрыл список
+      if (e.name === 'NotFoundError' && i === 0) throw e;
+    }
+  }
+  throw new Error('Браузер не дал выбрать устройство');
+}
 async function connect(){
   if (!navigator.bluetooth){ $('noBt').hidden = false; return; }
   try{
     const extra = $('extra').value.split(/[\s,;]+/).filter(Boolean).map(normUuid);
     log('Ищу устройства…');
-    device = await navigator.bluetooth.requestDevice({ acceptAllDevices:true, optionalServices:[...COMMON, ...extra] });
+    device = await pickDevice([...COMMON, ...extra]);
     $('tName').textContent = device.name || 'без имени';
     log(`Выбрано: ${device.name || 'без имени'}`);
     device.addEventListener('gattserverdisconnected', () => log('Браслет отключился', 'warn'));
@@ -163,7 +174,7 @@ async function connect(){
     stepState(2);
     for (const it of items){ const p = it.c.properties; if (p.notify || p.indicate) await subscribe(it); }
     startObservation();
-  }catch(e){ log('Ошибка: ' + (e.message || e), 'err'); }
+  }catch(e){ log(`Ошибка: ${e.name || ''} ${e.message || e}`, 'err'); $('btnCopy').disabled = false; $('btnShare').disabled = false; }
 }
 async function explore(){
   items = []; $('services').innerHTML = '';
