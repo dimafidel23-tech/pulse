@@ -127,10 +127,9 @@ input:focus,select:focus,textarea:focus{border-color:var(--dim)}
 .banner{background:var(--card2);border-radius:12px;padding:10px 12px;font-size:13px;color:var(--mute);margin-bottom:10px}
 .toast{position:fixed;left:50%;bottom:calc(88px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--text);color:var(--bg);padding:10px 16px;border-radius:12px;font-size:13px;font-weight:600;opacity:0;transition:opacity .2s;pointer-events:none;z-index:20;white-space:nowrap}
 .toast.on{opacity:1}
-nav{position:fixed;left:0;right:0;bottom:0;z-index:10;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-top:1px solid var(--line);display:flex;justify-content:space-around;padding:8px max(6px,env(safe-area-inset-right,0px)) calc(8px + env(safe-area-inset-bottom,0px)) max(6px,env(safe-area-inset-left,0px))}
+nav{position:fixed;left:0;right:0;bottom:0;z-index:10;background:var(--bg);border-top:1px solid var(--line);display:flex;justify-content:space-around;padding:8px max(6px,env(safe-area-inset-right,0px)) calc(8px + env(safe-area-inset-bottom,0px)) max(6px,env(safe-area-inset-left,0px))}
 nav a{color:var(--dim);text-decoration:none;font-size:10.5px;font-weight:600;display:flex;flex-direction:column;align-items:center;gap:4px;padding:3px 2px;border-radius:10px;flex:1;min-width:0}
 nav a.on{color:var(--text)}
-nav a.on svg{filter:drop-shadow(0 0 6px color-mix(in srgb,var(--text) 45%,transparent))}
 nav svg{width:22px;height:22px}
 .quick{text-align:center;padding:26px 6px 12px}
 .quick .q{font-size:22px;font-weight:700;margin-bottom:4px}
@@ -546,7 +545,7 @@ async function writeDoc(key){
   }
   busy[key] = false;
 }
-function saveDay(key=todayKey()){ cacheLocal(); writeDoc(key); }
+function saveDay(key=todayKey()){ sortDays(); cacheLocal(); writeDoc(key); }
 function saveS(){ cacheLocal(); writeDoc('__S'); }
 function dayRec(key=todayKey()){
   const d = days[key] || (days[key] = { date:key });
@@ -698,7 +697,7 @@ function ring(svg, frac, c1, c2, big, small, o={}){
   const fs = o.fs || (String(big).length > 3 ? 20 : 24);
   svg.innerHTML = `<defs><linearGradient id="${id}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" style="stop-color:${c2}"/><stop offset="1" style="stop-color:${c1}"/></linearGradient></defs>
     <circle cx="60" cy="60" r="${r}" fill="none" style="stroke:var(--track)" stroke-width="${sw}"/>
-    ${f > 0 ? `<circle cx="60" cy="60" r="${r}" fill="none" stroke="url(#${id})" style="filter:drop-shadow(0 0 5px color-mix(in srgb, ${c1} 65%, transparent))" stroke-width="${sw}" stroke-linecap="round" stroke-dasharray="${c}" stroke-dashoffset="${off}" transform="rotate(-90 60 60)"/>` : ''}
+    ${f > 0 ? `<circle cx="60" cy="60" r="${r}" fill="none" stroke="url(#${id})" stroke-width="${sw}" stroke-linecap="round" stroke-dasharray="${c}" stroke-dashoffset="${off}" transform="rotate(-90 60 60)"/>` : ''}
     <text x="60" y="${small?63:68}" text-anchor="middle" style="fill:var(--text)" font-family="Unbounded,Inter,system-ui" font-weight="700" font-size="${fs}">${esc(big)}</text>
     ${small?`<text x="60" y="81" text-anchor="middle" style="fill:var(--mute)" font-family="Inter,system-ui" font-weight="600" font-size="10.5">${esc(small)}</text>`:''}`;
 }
@@ -855,7 +854,7 @@ async function initAI(){
     if (IN_CLAUDE){ sample = await claude.use('sample'); if (sample){ const lim = await sample.limits().catch(()=>null); sampleImages = !!(lim && lim.images); } }
     else { let k = null; try{ k = localStorage.getItem(AIKEY); }catch(e){} if (k){ sample = apiSample(k); sampleImages = true; } }
   }catch(e){ sample = null; }
-  renderFood();
+  render();
 }
 function foodTargets(){
   const w = latestWeight(), h = S.height || 175, a = age(), male = (S.sex || 'м') === 'м';
@@ -1046,7 +1045,7 @@ function renderTrain(){
   line($('bwChart'), DL.filter(d=>d.weight).slice(-20).map(d=>({d:d.date, v:d.weight})), 'var(--text)', v=>v.toFixed(1), 'Взвешивайся утром — здесь появится график веса');
   renderLive();
 }
-$('progEx').onchange = renderTrain;
+$('progEx').onchange = render;
 $('woAdd').onclick = () => {
   const min = Number($('woMin').value), hr = Number($('woHr').value) || null;
   if (!min){ toast('Укажи минуты'); return; }
@@ -1453,6 +1452,7 @@ function bindMeasure(root){
   qa('[data-meas-stop]', root).forEach(x => x.onclick = () => measStop(true));
 }
 function renderMeasure(){
+  const v = view(); if (v !== 'device' && v !== 'metric') return;
   if ($('dvMeas')){ $('dvMeas').innerHTML = measureHTML(); bindMeasure($('dvMeas')); }
   if ($('mMeasure')){ const k = { hr:'hr', spo2:'spo2', bp:'bp' }[mKey]; $('mMeasure').innerHTML = (k && view() === 'metric') ? measureHTML(k) : ''; bindMeasure($('mMeasure')); }
 }
@@ -1474,7 +1474,7 @@ async function discoverAll(g){
       if (su === 'fea1' && pr.read){ clearInterval(BT.stepPoll); BT.stepPoll = setInterval(async () => { if (!BT.connected) return clearInterval(BT.stepPoll); try{ onSteps(await c.readValue()); }catch(e){} }, 60000); }
       if ((pr.notify || pr.indicate) && su !== '2a37' && su !== '2a19'){
         try{
-          c.addEventListener('characteristicvaluechanged', e => { const v = e.target.value; RAW.packets++; rawLog(`NOTIFY ${shortU(sv.uuid)}/${su}: ${hexOf(v)}`); if (su === 'fea1') onSteps(v); else onVendor(su, v); if (RAW.packets % 5 === 1) renderConn(); });
+          c.addEventListener('characteristicvaluechanged', e => { const v = e.target.value; RAW.packets++; rawLog(`NOTIFY ${shortU(sv.uuid)}/${su}: ${hexOf(v)}`); if (su === 'fea1') onSteps(v); else onVendor(su, v); if (RAW.packets % 5 === 1 && view() === 'device') renderConn(); });
           await c.startNotifications();
         }catch(e){ rawLog(`  подписка ${su}: ${e.message}`); }
       }
@@ -1512,7 +1512,7 @@ async function btConnect(pick){
     Object.assign(dev(), { btId: d.id, btName: d.name || '' });
     try{
       const ch = await (await g.getPrimaryService('battery_service')).getCharacteristic('battery_level');
-      const setBat = v => { Object.assign(dev(), { battery: v, batteryAt: Date.now() }); saveS(); renderDevice(); };
+      const setBat = v => { Object.assign(dev(), { battery: v, batteryAt: Date.now() }); saveS(); render(); };
       setBat((await ch.readValue()).getUint8(0));
       try{ ch.oncharacteristicvaluechanged = e => setBat(e.target.value.getUint8(0)); await ch.startNotifications(); }catch(e){}
     }catch(e){ saveS(); }
@@ -1576,8 +1576,6 @@ function renderConn(){
 }
 function renderDevice(){
   const b = batteryNow(), D = dev(), name = devName();
-  $('devName').textContent = name; $('devBat').textContent = b == null ? '' : b + '%';
-  $('devDot').style.color = BT.connected ? 'var(--g)' : batColor(b);
   renderConn();
   $('dvName').textContent = name;
   $('dvBat').textContent = b == null ? '—' : b + '%';
@@ -1601,10 +1599,28 @@ const TITLES = { home:'Сегодня', food:'Питание', train:'Трени
 const MAIN = ['home','food','train','sleep','device'];
 let lastMain = 'home';
 const view = () => { const v = (location.hash || '#home').slice(1); if (/^m-/.test(v) && METRICS[v.slice(2)]) return 'metric'; return TITLES[v] != null ? v : 'home'; };
+// Перерисовка: не чаще одного раза за кадр и только той вкладки, что сейчас открыта
+let renderQueued = false;
 function render(){
-  sortDays();
-  renderHome(); renderFood(); renderTrain(); renderSleep(); renderPrefs(); renderDevice();
-  if (view() === 'metric') renderMetric();
+  if (renderQueued) return;
+  renderQueued = true;
+  requestAnimationFrame(() => { renderQueued = false; renderNow(); });
+}
+function renderChip(){
+  const b = batteryNow();
+  $('devName').textContent = devName(); $('devBat').textContent = b == null ? '' : b + '%';
+  $('devDot').style.color = BT.connected ? 'var(--g)' : batColor(b);
+}
+function renderNow(){
+  sortDays(); renderChip();
+  const v = view();
+  if (v === 'home') renderHome();
+  else if (v === 'food') renderFood();
+  else if (v === 'train') renderTrain();
+  else if (v === 'sleep') renderSleep();
+  else if (v === 'device') renderDevice();
+  else if (v === 'prefs') renderPrefs();
+  else if (v === 'metric') renderMetric();
 }
 function route(){
   if (loaded && !(S.birth && S.height) && view() !== 'setup'){ location.hash = '#setup'; return; }
