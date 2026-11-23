@@ -16,7 +16,7 @@
 [hidden]{display:none!important}
 html,body{background:var(--bg)}
 body{margin:0;color:var(--text);font:15px/1.45 Inter,system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased}
-.wrap{max-width:560px;margin:0 auto;padding:max(14px,env(safe-area-inset-top)) 16px calc(96px + env(safe-area-inset-bottom))}
+.wrap{max-width:560px;margin:0 auto;padding-block:max(14px,env(safe-area-inset-top)) calc(96px + env(safe-area-inset-bottom));padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 h1{font-size:26px;margin:4px 0 2px;letter-spacing:-.4px}
 h2{font-size:17px;margin:0 0 10px;letter-spacing:-.2px}
 .sub{color:var(--mute);font-size:13px}
@@ -75,7 +75,7 @@ table{width:100%;border-collapse:collapse}
 .goalline{position:absolute;left:0;right:0;border-top:1px dashed var(--dim)}
 .ai{white-space:pre-wrap;font-size:14px;line-height:1.55}
 .toast{position:fixed;left:50%;bottom:calc(90px + env(safe-area-inset-bottom));transform:translateX(-50%);background:var(--text);color:var(--bg);padding:10px 16px;border-radius:12px;font-weight:600;font-size:14px;z-index:50;max-width:calc(100% - 32px);text-align:center}
-nav{position:fixed;left:0;right:0;bottom:0;z-index:10;background:rgba(7,7,10,.96);border-top:1px solid var(--line);display:flex;justify-content:space-around;padding:8px 6px calc(8px + env(safe-area-inset-bottom))}
+nav{position:fixed;left:0;right:0;bottom:0;z-index:10;background:rgba(7,7,10,.96);border-top:1px solid var(--line);display:flex;justify-content:space-around;padding:8px max(6px,env(safe-area-inset-right,0px)) calc(8px + env(safe-area-inset-bottom,0px)) max(6px,env(safe-area-inset-left,0px))}
 nav button{background:none;border:0;color:var(--dim);font:600 11px inherit;display:flex;flex-direction:column;align-items:center;gap:3px;flex:1;cursor:pointer;padding:4px}
 nav button.on{color:var(--text)}
 nav svg{width:24px;height:24px}
@@ -510,7 +510,16 @@ for (const [id, k] of [['pSex','sex'],['pAct','act'],['pGoal','goal']]) qa('#' +
 for (const [id, k] of [['pAge','age'],['pH','height'],['pW','weight'],['cK_','ck'],['cW_','cw'],['cP_','cp'],['cF_','cf'],['cC_','cc']]) $(id).oninput = () => { S[k] = num($(id).value); saveS(); render(); };
 $('pCustom').onchange = e => { if (e.target.checked && !S.custom){ const T = targets(); Object.assign(S, { ck:T.kcal, cw:T.water, cp:T.p, cf:T.f, cc:T.c }); } S.custom = e.target.checked; saveS(); render(); };
 $('kSave').onclick = () => { const v = $('kIn').value.trim(); if (v && !/^sk-ant-/.test(v)){ toast('Ключ должен начинаться с sk-ant-'); return; } if (v) lsSet(AIKEY, v); else { try{ localStorage.removeItem(AIKEY); }catch(e){} } $('kIn').value = ''; toast(v ? 'Ключ сохранён' : 'Ключ удалён'); initAI(); };
-$('exp').onclick = () => { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify({ S, days }, null, 1)], { type:'application/json' })); a.download = 'tarelka-' + todayKey() + '.json'; a.click(); };
+$('exp').onclick = async () => {
+  const data = JSON.stringify({ S, days }, null, 1), filename = 'tarelka-' + todayKey() + '.json';
+  if (IN_CLAUDE){
+    const dl = await claude.use('downloads').catch(() => null);
+    if (!dl){ toast('Скачивание здесь недоступно'); return; }
+    try{ await dl.save({ filename, data }); }catch(e){ if (e && e.code !== 'dismissed' && e.code !== 'declined') toast('Не удалось скачать'); }
+    return;
+  }
+  const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([data], { type:'application/json' })); a.download = filename; a.click();
+};
 $('imp').onchange = async e => {
   const f = e.target.files && e.target.files[0]; e.target.value = ''; if (!f) return;
   try{ const o = JSON.parse(await f.text()); if (!o || typeof o.days !== 'object') throw 0; S = Object.assign(defaultsS(), o.S); Object.assign(days, o.days); saveS(); Object.keys(o.days).forEach(k => writeDoc(k)); cacheLocal(); render(); toast('Загружено'); }
